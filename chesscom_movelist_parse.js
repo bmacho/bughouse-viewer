@@ -7,7 +7,7 @@
 // crazyhouse or bughouse half-games
 
 // the output consist of an array of moves in a format that 
-// Fiery's 2 decade old bug.js can eat
+// Fermy's 2 decade old bug.js can eat
 
 //
 
