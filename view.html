@@ -1,0 +1,142 @@
+<!--
+// Javascript bughouse viewer v 1.01 (C) Sergiy Vasylkevych aka Fermy on FICS
+// Feel free to use/copy/modify/distribute
+// This update 02.21.2002
+//-->
+
+<!--
+// I tried to modify it as less as possible
+// I made the part that feeds it with chess.com games
+// Pieces and things are from https://bughousedb.com/
+// No idea about the rights -- bmacho
+//
+// last modification: 03.24.2021
+//-->
+
+<script src="jquery-3.5.1.min.js" ></script>
+
+<script src="chesscom_movelist_parse.js" ></script>
+
+<script src="generate_bpgn.js" ></script>
+
+
+<body>
+<textarea id="pasteHere" style="
+position: absolute;
+border-radius: 25px;
+width: 70%;
+height: 30%;
+top: 15%;
+left: 15%;
+text-align: center; vertical-align: middle;
+font-size: 4em;
+display: table-cell; 
+contenteditable='true';
+"> Paste the chess.com game link here! </textarea>
+
+</body>
+
+
+<script>
+
+function handlePaste (e) {
+	document.body.removeEventListener('paste', handlePaste);
+	var clipboardData, pastedData;
+
+	// Stop data actually being pasted into div
+	e.stopPropagation();
+	e.preventDefault();
+
+	// Get pasted data via clipboard API
+	clipboardData = e.clipboardData || window.clipboardData;
+	pastedData = clipboardData.getData('Text');
+	
+	// Do whatever with pasteddata
+	gg( numbers_in_string(pastedData) )
+}
+
+function numbers_in_string (s) {
+	return s.match(/\d/g).join('')}
+
+
+document.getElementById('pasteHere').addEventListener('paste', handlePaste)
+document.body.addEventListener('paste', handlePaste)
+
+var searchParams = new URLSearchParams(window.location.search)
+
+if ( searchParams.has('game_id') ) {
+		document.getElementById("pasteHere").style.visibility = "hidden"
+		gg( numbers_in_string( searchParams.get("game_id") ) )
+	} else {
+		document.getElementById('pasteHere').addEventListener('paste', handlePaste)
+		document.body.addEventListener('paste', handlePaste)
+	}
+
+var gameA, gameB, movesA, movesB
+
+function gg (game_id) {
+	// change the url: 	
+	var queryParams = new URLSearchParams(window.location.search);
+	queryParams.set("game_id", game_id);
+	history.replaceState(null, null, "?"+queryParams.toString());
+
+	proxyurl = "https://api.allorigins.win/raw?url="
+	// browser won't
+	
+	gameurl = "https://www.chess.com/callback/live/game/" 
+
+	$.getJSON( proxyurl + gameurl + game_id, function( json ) {
+		gameA = json;
+
+		gameB_id = gameA.game.partnerGameId
+
+		$.getJSON( proxyurl + gameurl + gameB_id, function( json ) {
+			gameB = json;
+					
+			movesA = parseMoveList(gameA.game.moveList)
+			movesB = parseMoveList(gameB.game.moveList)
+
+			var bpgn1
+
+			bpgn1 = bpgn(gameA, gameB, movesA, movesB)
+			
+			console.log(bpgn1)
+
+			v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver","")		
+			assforward(999,'c','v1',0)
+
+			// arrows to move the board
+			var inter = -1;
+			var HOP = 60; //miliseconds
+
+			window.onkeydown = function( e ){
+				 if(inter == -1){
+					  inter = setInterval(function(){
+							if (e.keyCode == "39") assforward(1,'c','v1',0);
+							if (e.keyCode == "37") assundomove(1,'c','v1');
+					  }, HOP)
+				 }
+			}
+			window.onkeyup = function(){
+				 clearInterval(inter)
+				 inter = -1
+			}
+			
+		});	
+
+	});
+	
+}
+
+</script>
+
+
+<script type="text/javascript" src="bug.js"></script>
+<script type="text/javascript">
+
+Init()
+bpgn1=""
+
+v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver","")
+</script>
+
