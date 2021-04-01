@@ -39,12 +39,6 @@
 // if someone wants to make an other BH/ZH viewer can't use this output
 // because of the missing data of the pieces in hand
 
-var n = "mC0SbsZJCJSJlB5Qgv=CfHCvdv6ZsJ!TJT2T=292=V70=C86HQZQV2?!-L+G+l0CvCGlclQC&46Z-IZ84787*Z78Z087IC+SCT-RLRYRT!-80878!T802^07=07Y0^YP-J"
-
-// n = "=GXHGP"
-
-// game id: https://www.chess.com/live/game/6496655714
-
 function parseMoveList ( s ) {
 
 	// split the string into an array by 2 characters
