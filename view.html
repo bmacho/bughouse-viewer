@@ -105,7 +105,13 @@ function gg (game_id) {
 			v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver","")		
 			assforward(999,'c','v1',0)
 
-			// arrows to move the board
+			// up/down arrow to start/end
+			document.addEventListener('keydown', function( e ){
+				if (e.keyCode == "38") assundomove(999,'c','v1');  //up
+				if (e.keyCode == "40") assforward(999,'c','v1',0);   //down
+			});
+
+			// left/right arrows go back and forth
 			var inter = -1;
 			var HOP = 60; //miliseconds
 
