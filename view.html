@@ -52,7 +52,7 @@ function handlePaste (e) {
 	pastedData = clipboardData.getData('Text');
 	
 	// Do whatever with pasteddata
-	gg( numbers_in_string(pastedData) )
+	main( numbers_in_string(pastedData) )
 }
 
 function numbers_in_string (s) {
@@ -66,7 +66,7 @@ var searchParams = new URLSearchParams(window.location.search)
 
 if ( searchParams.has('game_id') ) {
 		document.getElementById("pasteHere").style.visibility = "hidden"
-		gg( numbers_in_string( searchParams.get("game_id") ) )
+		main( numbers_in_string( searchParams.get("game_id") ) )
 	} else {
 		document.getElementById('pasteHere').addEventListener('paste', handlePaste)
 		document.body.addEventListener('paste', handlePaste)
@@ -74,24 +74,25 @@ if ( searchParams.has('game_id') ) {
 
 var gameA, gameB, movesA, movesB
 
-function gg (game_id) {
+function main (game_id) {
 	// change the url: 	
 	var queryParams = new URLSearchParams(window.location.search);
 	queryParams.set("game_id", game_id);
 	history.replaceState(null, null, "?"+queryParams.toString());
 
 	proxyurl = "https://api.allorigins.win/raw?url="
-	// browser won't
+	// browser can't call the chess.com callback url directly bc of CORS restrictions
+	// so we use a random proxy provided by allorigins.win 
 	
-	gameurl = "https://www.chess.com/callback/live/game/" 
+	gameurl = "https://www.chess.com/callback/live/game/" // https://www.chess.com/callback/live/game/[GAME_ID] where the data lives 
 
-	$.getJSON( proxyurl + gameurl + game_id, function( json ) {
-		gameA = json;
+	$.getJSON( proxyurl + gameurl + game_id, function( json_reply ) {
+		gameA = json_reply;
 
 		gameB_id = gameA.game.partnerGameId
 
-		$.getJSON( proxyurl + gameurl + gameB_id, function( json ) {
-			gameB = json;
+		$.getJSON( proxyurl + gameurl + gameB_id, function( json_reply ) {
+			gameB = json_reply;
 					
 			movesA = parseMoveList(gameA.game.moveList)
 			movesB = parseMoveList(gameB.game.moveList)
