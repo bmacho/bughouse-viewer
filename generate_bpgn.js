@@ -1,47 +1,48 @@
 function bpgn(gameA, gameB, movesA, movesB) {
 	mv = JSON.parse( getMoveOrder(gameA, gameB) )
 
-	a = 0
-	b = 0 				// current move 
-	var whosTurn = 0  // 
-	
 	function set_piece_size (a,s) {
 		return ( a%2 ) ? s.toLowerCase() : s.toUpperCase() }
 	
 	var out = bpgn_header()
-	for (var i = 0; i < mv.length ; i++) {
 
-		if (mv[i].p == "A") {
+	stampsA = gameA.game.moveTimestamps.split(',')
+	stampsB = gameB.game.moveTimestamps.split(',')
+	
+	i = 0
+	a = 0
+	b = 0 				 // current move 
+	
+	while (i < stampsA.length + stampsB.length) {
 
-			// there is an out-indexing somewhere, maybe?
-			if (!movesA[a]) break 
-
-			// bug.js doesn't like if the time fall below 1
-			// so we don't let it
+		if (mv[i].p == "A" && a < movesA.length) {
 			turnNum = Math.floor(a/2)+1
-			out += " " + turnNum + set_piece_size(a,"A") + ". " + movesA[a] + " {" + Math.max(1, (gameA.game.moveTimestamps.split(',')[a]/10).toFixed(3) ) + "}" 
+			stamp = Math.max(1, (stampsA[a]/10).toFixed(3) )  //
+			
+			out += " " + turnNum + set_piece_size(a,"A") + ". " + movesA[a] + " {" + stamp + "}" 
+
+			mv[i].id = turnNum + set_piece_size(a,"A")
+			mv[i].fen = movesA[a] 
+
 			a++
-		} else {
-			
-			// there is an out-indexing somewhere, maybe?
-			if (!movesB[b]) break 
-			
+		}
+				
+		if (mv[i].p == "B" && b < movesB.length) {
 			turnNum = Math.floor(b/2)+1
-			out += " " + turnNum + set_piece_size(b,"B") + ". " + movesB[b] + " {" + Math.max(1, (gameB.game.moveTimestamps.split(',')[b]/10).toFixed(3) ) + "}" 
+			stamp = Math.max(1, (stampsB[b]/10).toFixed(3) )
+			
+			out += " " + turnNum + set_piece_size(b,"B") + ". " + movesB[b] + " {" + stamp + "}" 
+
+			mv[i].id = turnNum + set_piece_size(b,"B")
+			mv[i].fen = movesB[b] 
+			
 			b++
 		}
-	}
-	
-	// if there are remaining moves that we hasn't used yet somehow
-	while (movesA[a]) {
-		out += " " + turnNum + set_piece_size(a,"A") + ". " + movesA[a] + " {" + Math.max(1, (gameA.game.moveTimestamps.split(',')[a]/10).toFixed(3) ) + "}" 
-		a++
+		
+		i++
 	}
 
-	while (movesB[b]) {
-		out += " " + turnNum + set_piece_size(b,"B") + ". " + movesB[b] + " {" + Math.max(1, (gameA.game.moveTimestamps.split(',')[b]/10).toFixed(3) ) + "}" 
-		b++
-	}
+	console.log(mv)
 
 	out += "{" + gameA.game.resultMessage + "}  *"
 	return out
@@ -49,7 +50,8 @@ function bpgn(gameA, gameB, movesA, movesB) {
 
 
 function getMoveOrder (gameA, gameB) {
-	// if the moves happen simultaneously then boardA will be first
+	// calculates the moving time and then the move order
+	// returns a list of objects that has the ID and the moving time
 	
 	var initialTime = gameA.game.baseTime1
 	var timeIncrement = gameA.game.timeIncrement1*10
@@ -61,6 +63,7 @@ function getMoveOrder (gameA, gameB) {
 	function getMoveTimes (moveTimestamps) {
 		//	timestamps from chess.com in a list, it has the 
 		// remaining times of the players in alternating order
+		// only matters when there is a time increment 
 
 		var stamps = moveTimestamps.split(",") 
 		stamps[-1] = initialTime 	// adding a -1th element does not
@@ -83,29 +86,30 @@ function getMoveOrder (gameA, gameB) {
 	tA = getMoveTimes( gameA.game.moveTimestamps )
 	tB = getMoveTimes( gameB.game.moveTimestamps )
 
-	console.log("Timestamps: ", tA, tB)
-
 	var globalMoves = []
-	ind = 0
 	
-	var sumlength = tA.length + tB.length +1
-	for (var i = 0; i < sumlength ; i++ ){
-		var mv = {}
-		var tAempty = ( tA.length == 0 )
-		var tBempty = ( tB.length == 0 )			
+	var a = 0
+	var b = 0 // indexes when we go throught tA and tB
+		
+	for (var i = 0; i < tA.length + tB.length ; i++ ){
 
+		var mv = {}
+		
+		var tAempty = ( tA.length == a )
+		var tBempty = ( tB.length == b ) 
+		
 		var bothNonEmpty = !tAempty && !tBempty
-			
-		if ( (bothNonEmpty && tB[0] < tA[0]) || tAempty ) {
+		
+		if ( (bothNonEmpty && tB[b] < tA[a]) || tAempty ) {
 			mv.p = "B"
-			mv.t  = tB.shift() 
-			globalMoves[ind] = mv
-			ind ++ 
+			mv.t  = tB[b]
+			globalMoves[i] = mv
+			b++
 		} else {
 			mv.p = "A"
-			mv.t  = tA.shift() 
-			globalMoves[ind] = mv
-			ind ++
+			mv.t  = tA[a]
+			globalMoves[i] = mv
+			a++
 		}
 	}
 	
@@ -125,7 +129,16 @@ function bpgn_header ( ) {
 	bpgn_string += '[WhiteB "'+gameB.game.pgnHeaders.White+'"][WhiteBElo "'+gameB.game.pgnHeaders.WhiteElo+'"]'
 	bpgn_string += '[BlackB "'+gameB.game.pgnHeaders.Black+'"][BlackBElo "'+gameB.game.pgnHeaders.BlackElo+'"]'
 	bpgn_string += '[TimeControl "'+gameA.game.pgnHeaders.TimeControl+'"]'
-	bpgn_string += '{C:chess.com/live/game/'+gameA.game.id+' and chess.com/live/game/' +gameB.game.id+ '}'
+	
+	bpgn_string += '{C:' + gameA.game.pgnHeaders.Date + ' ' +  gameA.game.pgnHeaders.EndTime + ' bughouse game between ' +
+		gameA.game.pgnHeaders.White + ' (' +  gameA.game.pgnHeaders.WhiteElo +') and ' +
+		gameB.game.pgnHeaders.Black + ' (' +  gameB.game.pgnHeaders.BlackElo +') vs. ' +
+		gameA.game.pgnHeaders.Black + ' (' +  gameA.game.pgnHeaders.BlackElo +') and ' +
+		gameB.game.pgnHeaders.White + ' (' +  gameB.game.pgnHeaders.WhiteElo +'). ' +
+		'board A: chess.com/live/game/' + gameA.game.id + 
+		'board B: chess.com/live/game/' + gameB.game.id + 
+	'}'
+
 	return bpgn_string
 }
 
