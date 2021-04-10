@@ -13,6 +13,8 @@
 // last modification: 03.24.2021
 //-->
 
+<script type="text/javascript" src="bug.js"></script>
+
 <script src="jquery-3.5.1.min.js" ></script>
 
 <script src="chesscom_movelist_parse.js" ></script>
@@ -65,9 +67,22 @@ document.body.addEventListener('paste', handlePaste)
 var searchParams = new URLSearchParams(window.location.search)
 
 if ( searchParams.has('game_id') ) {
+
+		// --- no idea what this is for
+		Init()
+		bpgn1=""
+		v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver","")
+		// ---
+
 		document.getElementById("pasteHere").style.visibility = "hidden"
 		main( numbers_in_string( searchParams.get("game_id") ) )
 	} else {
+
+		// this draws an empty board
+		Init()
+		bpgn1=""
+		v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver","")
+		
 		document.getElementById('pasteHere').addEventListener('paste', handlePaste)
 		document.body.addEventListener('paste', handlePaste)
 	}
@@ -138,15 +153,5 @@ function main (game_id) {
 	
 }
 
-</script>
-
-
-<script type="text/javascript" src="bug.js"></script>
-<script type="text/javascript">
-
-Init()
-bpgn1=""
-
-v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver","")
 </script>
 
