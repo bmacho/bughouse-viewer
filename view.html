@@ -66,12 +66,14 @@ document.body.addEventListener('paste', handlePaste)
 
 var searchParams = new URLSearchParams(window.location.search)
 
+var flip = (searchParams.get('flip') == "true" ) ? 'flip' :'noflip';
+
 if ( searchParams.has('game_id') ) {
 
 		// --- no idea what this is for
 		Init()
 		bpgn1=""
-		v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver","")
+		v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver",flip)
 		// ---
 
 		document.getElementById("pasteHere").style.visibility = "hidden"
@@ -81,7 +83,7 @@ if ( searchParams.has('game_id') ) {
 		// this draws an empty board
 		Init()
 		bpgn1=""
-		v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver","")
+		v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver",flip)
 		
 		document.getElementById('pasteHere').addEventListener('paste', handlePaste)
 		document.body.addEventListener('paste', handlePaste)
@@ -118,7 +120,7 @@ function main (game_id) {
 			
 			console.log(bpgn1)
 
-			v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver","")		
+			v1=new game("v1",bpgn1, "","", "", "playb", "", "gif2/", 40, "silver",flip)		
 			assforward(999,'c','v1',0)
 
 			// up/down arrow to start/end
