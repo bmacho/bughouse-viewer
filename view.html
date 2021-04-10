@@ -149,6 +149,10 @@ function main (game_id) {
 			// disable right click
 			document.addEventListener('contextmenu', event => event.preventDefault());
 			
+			
+			// add fork on github button
+			addForkOnGithub()
+			
 		});	
 
 	});
@@ -157,3 +161,35 @@ function main (game_id) {
 
 </script>
 
+<script>
+function addForkOnGithub() {
+
+	var forkdiv = document.createElement("div")
+
+	forkdiv.id = 'forkongithub'
+
+	forkdiv.innerHTML = '<br> <a href="https://github.com/bmacho/bughouse-viewer">Fork me on GitHub</a>'
+	
+	var style = 
+		'<style>' + 
+
+			'#forkongithub a{background:#083;color:#fff;text-decoration:none;font-family:arial,sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}' + 
+
+			'#forkongithub a:hover{background:#c11;color:#fff;}' + 
+
+			'#forkongithub a::before,#forkongithub a::after{content:"";width:100%;display:block;position:absolute;top:1px;left:0;height:1px;background:#fff;}' + 
+
+			'#forkongithub a::after{bottom:1px;top:auto;}' + 
+
+			'#forkongithub {width:1010px; padding: 0; margin:0; border:none; text-align:center;}' + 
+
+		'</style>'
+	
+	$( style ).appendTo( "head" )
+
+	document.body.appendChild(forkdiv);
+}
+
+addForkOnGithub()
+
+</script>
