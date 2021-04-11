@@ -136,7 +136,7 @@ function bpgn_header ( ) {
 		gameA.game.pgnHeaders.Black + ' (' +  gameA.game.pgnHeaders.BlackElo +') and ' +
 		gameB.game.pgnHeaders.White + ' (' +  gameB.game.pgnHeaders.WhiteElo +'). ' +
 		'board A: chess.com/live/game/' + gameA.game.id + 
-		'board B: chess.com/live/game/' + gameB.game.id + 
+		' board B: chess.com/live/game/' + gameB.game.id + 
 	'}'
 
 	return bpgn_string
