@@ -13,7 +13,9 @@
 // last modification: 04.19.2021
 //-->
 
-<script type="text/javascript" src="bug.js"></script>
+<style> .debug {visibility: hidden} </style>
+
+<script type="text/javascript" src="hy.js"></script>
 
 <script src="jquery-3.5.1.min.js" ></script>
 
@@ -132,8 +134,14 @@ if ( searchParams.has('game_id') ) {
 <script>
 	// up/down arrow to start/end
 	document.addEventListener('keydown', function( e ){
-		if (e.keyCode == "38") assundomove(999,'c','v1');  //up
-		if (e.keyCode == "40") assforward(999,'c','v1',0);   //down
+		if (e.keyCode == "38") { //up
+			saveNote('v1')
+			assundomove(999,'c','v1')
+		}  
+		if (e.keyCode == "40") { //down
+			saveNote('v1')
+			assforward(999,'c','v1',0)
+		}   
 	});
 
 	// left/right arrows go back and forth
@@ -143,8 +151,14 @@ if ( searchParams.has('game_id') ) {
 	window.onkeydown = function( e ){
 		 if(inter == -1){
 			  inter = setInterval(function(){
-					if (e.keyCode == "39") assforward(1,'c','v1',0);
-					if (e.keyCode == "37") assundomove(1,'c','v1');
+					if (e.keyCode == "39") {
+						saveNote('v1')
+						assforward(1,'c','v1',0)
+					}
+					if (e.keyCode == "37") {
+						saveNote('v1')
+						assundomove(1,'c','v1')
+					}
 			  }, HOP)
 		 }
 	}
@@ -174,7 +188,19 @@ if ( searchParams.has('game_id') ) {
 </style>
 
 <div id='forkongithub'> 
-	
+	<div style="text-align: center;">
+		<div style="display: inline-block; text-align: left;">
+			<h2>What's new:</h2>
+			<ul>
+				<li>drag and drop moves (SKA_cz)</li>
+				<li>last moves are now highlighted (SKA_cz or Wir?)</li>
+				<li>some random bugs are now eliminated (SKA_cz)</li>
+				<li>you can edit and save notes (bmacho)</li>
+				<li>variations more intuitive</li>
+			</ul> 
+		</div>
+	</div>
+
 	<a href="https://github.com/bmacho/bughouse-viewer">Fork me on GitHub</a>
 	
 </div>
