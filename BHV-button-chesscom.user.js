@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         BHV link to chess.com
-// @namespace    bmacho
-// @version      2021-05-06
-// @description  puts a link into the left menu under the diamond
+// @namespace    https://github.com/bmacho/bughouse-viewer/
+// @version      2021-05-07
+// @description  puts a BHV link under the diamond, into the left menubar
 // @author       bmacho
 // @match        https://www.chess.com/game/live/*
 // @match        https://www.chess.com/live*
@@ -20,6 +20,7 @@
     } else {
     setTimeout(wait, 100);}})();
 
+
 function add_button() {
 
     var review_button = document.createElement("strong");
@@ -30,6 +31,7 @@ function add_button() {
     document.getElementsByClassName("menu top")[0].appendChild(review_button)
 
 }
+
 
 function openBHV() {
 
