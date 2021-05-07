@@ -188,10 +188,27 @@ if ( searchParams.has('game_id') ) {
 </style>
 
 <div id='forkongithub'> 
-	<div style="text-align: center;">
+
+	<a href="https://github.com/bmacho/bughouse-viewer">Fork me on GitHub</a>
+	
+</div>
+
+	<div style="text-align: left;">
 		<div style="display: inline-block; text-align: left;">
 			<h2>What's new:</h2>
 			<ul>
+				<li>bookmarklet: <a href="
+					javascript: void function() {
+						var game_id = ''; 
+						if (location.pathname == '/live') {
+							game_id = location.hash.substr(3)
+						}; 
+						if (location.pathname.slice(0, 11) == '/game/live/') {
+							game_id = location.pathname.slice(11)
+						}; 
+						window.open('https://bmacho.github.io/bughouse-viewer/view.html?game_id=' + game_id, '_blank');
+					}()
+					">[BHV]</a> or <a href="BHV-button-chesscom.user.js">userscript<a></a></li>
 				<li>code grabbed form SKA_cz's onlinea.eu</li>
 				<li>drag and drop moves (code from SKA_cz)</li>
 				<li>last moves are now highlighted (SKA_cz or Wir?)</li>
@@ -201,7 +218,3 @@ if ( searchParams.has('game_id') ) {
 			</ul> 
 		</div>
 	</div>
-
-	<a href="https://github.com/bmacho/bughouse-viewer">Fork me on GitHub</a>
-	
-</div>
