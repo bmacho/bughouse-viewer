@@ -86,6 +86,10 @@ document.body.addEventListener('paste', handlePaste)
 
 var gameA, gameB, movesA, movesB
 
+
+
+var main_firsttry = true
+
 function main (game_id) {
 	// change the url: 	
 	var queryParams = new URLSearchParams(window.location.search);
@@ -95,10 +99,19 @@ function main (game_id) {
 	proxyurl = "https://api.allorigins.win/raw?url="
 	// browser can't call the chess.com callback url directly bc of CORS restrictions
 	// so we use a random proxy provided by allorigins.win 
+
+
+	// this part is for the case when someone opened a game that was currently played
+	// and cloudflare cached the empty string forever
 	
+	if ( !main_firsttry ) {
+		proxyurl = "https://api.allorigins.win/raw?date=" + new Date().getTime() + "&url="
+	}
+
 	gameurl = "https://www.chess.com/callback/live/game/" // https://www.chess.com/callback/live/game/[GAME_ID] where the data lives 
 
 	$.getJSON( proxyurl + gameurl + game_id, function( json_reply ) {
+		
 		gameA = json_reply;
 
 		gameB_id = gameA.game.partnerGameId
@@ -118,6 +131,13 @@ function main (game_id) {
 			v1.reloadgame(bpgn1, "", "")
 			assforward(999,'c','v1',0)
 		});	
+	})
+	.fail(function() { 
+		if ( main_firsttry ) {	
+			console.log("we couldn't get the game first time. Was it a caching issue? We must try it again") 
+			main_firsttry = false
+			main(game_id)
+		}
 	});
 }
 
