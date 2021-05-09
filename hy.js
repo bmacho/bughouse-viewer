@@ -3393,7 +3393,7 @@ function drawboard() /* generates html for the board */ {
 	tmp += ' <td align="center" valign="top">';
 	//here is readonly and disabled because of smartphones and android tablets to no focus and opening keyboard but hold playing board arranged on screeen! 
 	if (this.displaymode != 'diagram') {
-		tmp += '<input disabled readonly type="text" size="12" name="lastmove' + bd + '" value=" " onChange="assexecmove(this.value,\'' + bd + '\',\'' + this.viewername + "'" + ')"> ';
+		tmp += '<input hidden readonly type="text" size="12" name="lastmove' + bd + '" value=" " onChange="assexecmove(this.value,\'' + bd + '\',\'' + this.viewername + "'" + ')"> ';
 	};
 
 	if (this.reloadmode == "noreload") {
