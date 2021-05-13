@@ -1743,53 +1743,55 @@ function refreshhighlight() {
 
 	if (!v1.a) return;
 	if (!v1.b) return;
-	if (!v1.BPGN) return;
-	if (!v1.currentmove) return;
-	if (!v1.BPGN[v1.currentmove].dmove) return;  
-
-// 
-
-	let currentNode = this.BPGN[this.currentmove] 
-	let boardId = currentNode.dmove.board
-	let boardObj = eval(this.viewername + "." + boardId)
-
-// unhighlight the whole board (only one where the currentmove happened)
-
-	boardObj.unHighlightAll()
-
-// get the moves to highlight
-
-	let fromSquare = currentNode.dmove.fromsquare 
-	let toSquare = currentNode.dmove.tosquare 
 	
-// some cases, according to the move type
+	for (const boardId of "ab".split('')) { 
+	
+		let boardObj = eval(this.viewername + "." + boardId)
 
-	// it's a dropmove: 
-	if ( typeof fromSquare === 'number' && fromSquare == 65 ) { 
-		boardObj.Highlight( toSquare )
-	}
-	
-	// it's a normal move:
+		// unhighlight the board
 
-	if ( typeof fromSquare === 'number' && fromSquare <= 63 &&
-		 typeof toSquare === 'number' && toSquare <= 63) {
-		boardObj.Highlight( fromSquare, toSquare )
-	}
-	
-	// short castle:
-	
-	if ( fromSquare == "o-o" ) {
-		if ( currentNode.dmove.side == "w" ) {
-				boardObj.Highlight(61, 62)
-			}
+		boardObj.unHighlightAll()
+
+		// get the moves to highlight:
 		
-		if ( currentNode.dmove.side == "b" ) {
-				boardObj.Highlight(5, 6)
-			}	
-	}
+		let currentNode = this.BPGN[this.currentmove] 
+
+		while ( boardId == "a" && currentNode.dmove.board == "b" ||
+				boardId == "b" && currentNode.dmove.board == "a") {
+			currentNode = this.BPGN[ currentNode.nParent ] 
+		}
+
+		let fromSquare = currentNode.dmove.fromsquare 
+		let toSquare = currentNode.dmove.tosquare 
+				
+	// some cases, according to the move type
+
+		// it's a dropmove: 
+		if ( typeof fromSquare === 'number' && fromSquare == 65 ) { 
+			boardObj.Highlight( toSquare )
+		}
 		
+		// it's a normal move:
+
+		if ( typeof fromSquare === 'number' && fromSquare <= 63 &&
+			 typeof toSquare === 'number' && toSquare <= 63) {
+			boardObj.Highlight( fromSquare, toSquare )
+		}
+		
+		// short castle:
+		
+		if ( fromSquare == "o-o" ) {
+			if ( currentNode.dmove.side == "w" ) {
+					boardObj.Highlight(61, 62)
+				}
+			
+			if ( currentNode.dmove.side == "b" ) {
+					boardObj.Highlight(5, 6)
+				}	
+		}
+			
 		// long castle:
-		
+			
 		if ( fromSquare == "o-o-o" ) { // short castle
 			if ( currentNode.dmove.side == "w" ) {
 				boardObj.Highlight(58, 59)
@@ -1799,13 +1801,9 @@ function refreshhighlight() {
 				boardObj.Highlight(2,3)
 			}	
 		}
-	
-	function flip( ind ) { 
-		if (boardFlipped) {
-			ind = 63 - ind
-		}
-		return ind
+		
 	}
+
 }
 
 function NODE() {
@@ -2780,6 +2778,7 @@ function assdelete(viewer) {
 	if (v.currentmove == BPGN_ROOT) return;
 	v.BPGN_DeleteCurrentMove(v.currentmove);
 	v.undomove();
+	v.refreshhighlight()
 }
 
 function BPGN_DeleteCurrentMove(nCurrent) {
@@ -3962,6 +3961,7 @@ function assforward(num, bd, viewer, opt) {
 			v.refreshhighlight()
 			return;
 		};
+
 		moveind = v.BPGN[v.currentmove].nNext[opt];
 		if (!v.BPGN[moveind].dmove) {
 			tbd = eval('v.' + v.BPGN[moveind].cBoard.toLowerCase());
@@ -3995,13 +3995,18 @@ function assundomove(num, bd, viewer) {
 	};
 	var v = eval(viewer);
 	while (f < num) {
-		if (v.currentmove == BPGN_ROOT) return;
+		if (v.currentmove == BPGN_ROOT) {
+			v.refreshhighlight()
+			return;
+		}
+		
 		mbd = v.BPGN[v.currentmove].dmove.board;
 		if (t.indexOf(mbd) >= 0) {
 			f++;
 		};
 		v.undomove();
 	};
+	v.refreshhighlight()
 }
 
 function analysis(viewer) {
@@ -4013,6 +4018,7 @@ function analysis(viewer) {
 function assexecmove(text, bd, viewer) {
 	var v = eval(viewer);
 	v.execmove(bd, text);
+	v.refreshhighlight()
 }
 
 function forwardmove(ind) {
@@ -4205,7 +4211,6 @@ function undomove() {
 	};
 	this.refreshclock();
 	this.refreshinfo();
-	this.refreshhighlight()
 }
 
 function bugorzh(viewer) {
@@ -4732,6 +4737,8 @@ function assloadgame(viewer) {
 	};
 	v.reloadwindow.document.writeln(generateloadhtml(viewer));
 	v.reloadwindow.focus();
+	v.refreshhighlight()
+
 }
 
 function drawcontrol(color, mode) {
