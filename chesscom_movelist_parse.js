@@ -188,13 +188,13 @@ function parseMoveList ( s ) {
 		if (kingmove == "e8g8") {
 			brd["h8"] = "."
 			brd["f8"] = "r"
-			mv.push(  "o-o" )		
+			mv.push(  "O-O" )		
 		}
 		
 		if (kingmove == "e8c8") {
 			brd["a8"] = "."
 			brd["d8"] = "r"
-			mv.push(  "o-o-o" )		
+			mv.push(  "O-O-O" )		
 		}	
 
 		brd[ sq(ta) ] = brd[ sq(so) ]
