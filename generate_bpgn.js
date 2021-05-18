@@ -119,16 +119,17 @@ function getMoveOrder (gameA, gameB) {
 
 function bpgn_header ( ) {
 	var bpgn_string="";
-	bpgn_string += '[Event "'+gameA.game.pgnHeaders.Event+'"]'
-	bpgn_string += '[Site "'+gameA.game.pgnHeaders.Site+'"]'
-	bpgn_string += '[Date "'+gameA.game.pgnHeaders.Date+'"]'									// possibly the end date in PDT?
-	bpgn_string += '[Time "'+gameA.game.pgnHeaders.EndTime+'"]' 							// this is the time of the end of a match
+	bpgn_string += '[Event "'+gameA.game.pgnHeaders.Event+'"]\n'
+	bpgn_string += '[Site "'+gameA.game.pgnHeaders.Site+'"]\n'
+	bpgn_string += '[Date "'+gameA.game.pgnHeaders.Date+'"]\n'									// possibly the end date in PDT?
+	bpgn_string += '[Time "'+gameA.game.pgnHeaders.EndTime+'"]\n' 							// this is the time of the end of a match
 																												// TODO: substract game length from it
-	bpgn_string += '[WhiteA "'+gameA.game.pgnHeaders.White+'"][WhiteAElo "'+gameA.game.pgnHeaders.WhiteElo+'"]'
-	bpgn_string += '[BlackA "'+gameA.game.pgnHeaders.Black+'"][BlackAElo "'+gameA.game.pgnHeaders.BlackElo+'"]'
-	bpgn_string += '[WhiteB "'+gameB.game.pgnHeaders.White+'"][WhiteBElo "'+gameB.game.pgnHeaders.WhiteElo+'"]'
-	bpgn_string += '[BlackB "'+gameB.game.pgnHeaders.Black+'"][BlackBElo "'+gameB.game.pgnHeaders.BlackElo+'"]'
-	bpgn_string += '[TimeControl "'+gameA.game.pgnHeaders.TimeControl+'"]'
+	bpgn_string += '[WhiteA "'+gameA.game.pgnHeaders.White+'"][WhiteAElo "'+gameA.game.pgnHeaders.WhiteElo+'"]\n'
+	bpgn_string += '[BlackA "'+gameA.game.pgnHeaders.Black+'"][BlackAElo "'+gameA.game.pgnHeaders.BlackElo+'"]\n'
+	bpgn_string += '[WhiteB "'+gameB.game.pgnHeaders.White+'"][WhiteBElo "'+gameB.game.pgnHeaders.WhiteElo+'"]\n'
+	bpgn_string += '[BlackB "'+gameB.game.pgnHeaders.Black+'"][BlackBElo "'+gameB.game.pgnHeaders.BlackElo+'"]\n'
+	bpgn_string += '[TimeControl "'+gameA.game.pgnHeaders.TimeControl+'"]\n'
+	bpgn_string += '[Result "'+gameA.game.pgnHeaders.Result+'"]\n\n'
 	
 	bpgn_string += '{C:' + gameA.game.pgnHeaders.Date + ' ' +  gameA.game.pgnHeaders.EndTime + ' bughouse game between ' +
 		gameA.game.pgnHeaders.White + ' (' +  gameA.game.pgnHeaders.WhiteElo +') and ' +
