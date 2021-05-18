@@ -58,7 +58,7 @@ function getMoveOrder (gameA, gameB) {
 
 	// these will contain the amount of time that has passed
 	var	tA = [],
-			tB = []
+		tB = []
 
 	function getMoveTimes (moveTimestamps) {
 		//	timestamps from chess.com in a list, it has the 
@@ -134,9 +134,9 @@ function bpgn_header ( ) {
 		gameA.game.pgnHeaders.White + ' (' +  gameA.game.pgnHeaders.WhiteElo +') and ' +
 		gameB.game.pgnHeaders.Black + ' (' +  gameB.game.pgnHeaders.BlackElo +') vs. ' +
 		gameA.game.pgnHeaders.Black + ' (' +  gameA.game.pgnHeaders.BlackElo +') and ' +
-		gameB.game.pgnHeaders.White + ' (' +  gameB.game.pgnHeaders.WhiteElo +'). ' +
-		'board A: chess.com/live/game/' + gameA.game.id + 
-		' board B: chess.com/live/game/' + gameB.game.id + 
+		gameB.game.pgnHeaders.White + ' (' +  gameB.game.pgnHeaders.WhiteElo +').' +
+		'\nboard A: chess.com/live/game/' + gameA.game.id + 
+		'\nboard B: chess.com/live/game/' + gameB.game.id + 
 	'}'
 
 	return bpgn_string
