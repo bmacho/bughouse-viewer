@@ -61,7 +61,7 @@ function parseMoveList ( s ) {
 		"a2":"P","b2":"P","c2":"P","d2":"P","e2":"P","f2":"P","g2":"P","h2":"P",
 		"a1":"R","b1":"N","c1":"B","d1":"Q","e1":"K","f1":"B","g1":"N","h1":"R"}
 
-   var pieces		= "qnrbpk" 			// Q N R B P K
+    var pieces		= "qnrbpk" 			// Q N R B P K
 
 	var drops		= "&-*+="   		// Q N R B P
 	
@@ -203,6 +203,9 @@ function parseMoveList ( s ) {
 	}
 
 	function doRegularMove() {
+		
+		var is_capture = ( brd[ sq(ta) ] != "." )
+		var write_x = (is_capture) ? "x" : "";
 
 		brd[ sq(ta) ] = brd[ sq(so) ]
 		brd[ sq(so) ] = "."
@@ -210,9 +213,13 @@ function parseMoveList ( s ) {
 		var is_pawnmove = "pP".includes( brd[ sq(ta) ] ) 
 
 		if (is_pawnmove) {
-			mv.push( sq(so) + sq(ta) )
+			if (is_capture) {
+				mv.push( sq(so)[0] + "x" + sq(ta) )
+			} else {
+				mv.push( sq(ta) )	
+			}
 		} else {
-			mv.push( brd[sq(ta)].toUpperCase() + sq(so) + sq(ta) )
+			mv.push( brd[sq(ta)].toUpperCase() + sq(so) + write_x + sq(ta) )
 		}
 	}
 
@@ -234,7 +241,7 @@ function parseMoveList ( s ) {
 		brd[ sq(ta) ] = brd[ sq(so) ]
 		brd[ sq(so) ] = "."
 		
-		mv.push( sq(so) + sq(ta) )
+		mv.push( sq(so)[0] + "x" + sq(ta) )
 	}
 
 	function doPromotion () {
@@ -256,7 +263,14 @@ function parseMoveList ( s ) {
 		brd [ sq(so) ] = "."
 		brd [ta_sq] = set_piece_size( promote_to ) 
 		
-		mv.push( sq(so) + ta_sq + "=" + promote_to.toUpperCase() )		
+		var is_capture = ( brd[ sq(ta) ] != "." )
+		
+		if (is_capture) {
+			mv.push( sq(so)[0] + "x" + ta_sq + "=" + promote_to.toUpperCase() )		
+		} else {
+			mv.push( ta_sq + "=" + promote_to.toUpperCase() )		
+		}
+		
 	}
 
 	return mv
