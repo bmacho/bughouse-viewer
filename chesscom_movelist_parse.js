@@ -248,7 +248,7 @@ function parseMoveList ( s ) {
 		// {~} (^) [_] @#$
 		// the group decides if we promote to Q N R B, 
 		// and the mod 3 decides if the promoting pawn lowers, equals or increases file
-		
+				
 		var promotes = "{~}(^)[_]@#$"
 		var files = "abcdefgh"
 
@@ -262,10 +262,8 @@ function parseMoveList ( s ) {
 
 		brd [ sq(so) ] = "."
 		brd [ta_sq] = set_piece_size( promote_to ) 
-		
-		var is_capture = ( brd[ sq(ta) ] != "." )
-		
-		if (is_capture) {
+								
+		if ( sq(so)[0] != ta_sq[0] ) {
 			mv.push( sq(so)[0] + "x" + ta_sq + "=" + promote_to.toUpperCase() )		
 		} else {
 			mv.push( ta_sq + "=" + promote_to.toUpperCase() )		
