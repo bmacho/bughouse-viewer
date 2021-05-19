@@ -1362,7 +1362,16 @@ function generatebfen() {
 
 	res += holdText(this);
 
-	res += ' ' + whosmove(this.turn) + ' ' + this.wclock + ' ' + this.bclock;
+	let castles = ""
+
+	let K = (this.shortcastlew == true) ? "K" : ""
+	let Q = (this.longcastlew == true) ? "Q" : ""
+	let k = (this.shortcastleb == true) ? "k" : ""
+	let q = (this.longcastleb == true) ? "q" : ""
+	
+	castles = K + Q + k + q
+	
+	res += ' ' + castles + ' ' + whosmove(this.turn) + ' ' + this.wclock + ' ' + this.bclock;
 	return res;
 }
 
