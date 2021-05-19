@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BHV link to chess.com
 // @namespace    https://github.com/bmacho/bughouse-viewer/
-// @version      2021-05-14
+// @version      2021-05-19
 // @description  puts a BHV link under the diamond, into the left menubar
 // @author       bmacho
 // @match        https://www.chess.com/game/live/*
@@ -24,8 +24,9 @@
 function add_button() {
 
     var review_button = document.createElement("strong");
-	review_button.innerHTML = "<a href='javascript:void(0)' >[review game]</a>"
+	review_button.innerHTML = "[review game]"
     review_button.style.textAlign = "center"
+    review_button.style.cursor = "pointer"
     review_button.addEventListener ("click", openBHV)
     review_button.addEventListener ("auxclick", openBHV)
 
