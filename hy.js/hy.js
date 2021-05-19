@@ -1371,7 +1371,7 @@ function generatebfen() {
 	
 	castles = K + Q + k + q
 	
-	res += ' ' + castles + ' ' + whosmove(this.turn) + ' ' + this.wclock + ' ' + this.bclock;
+	res += ' ' + whosmove(this.turn) + ' ' + castles + ' ' + this.wclock + ' ' + this.bclock;
 	return res;
 }
 
