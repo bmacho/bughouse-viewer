@@ -1263,19 +1263,22 @@ function indelim(str, pos, del1, del2) /* returns a piece of a string str that s
 function totime(numb) { //numb in secs
 	//Math.floor Round a number downward to its nearest integer
 	//Math.trunc() function returns the integer part of a number by removing any fractional digits.
+
+	if (numb <= 0) {return "0:00.0"}
+
 	var num = Math.abs(numb);
 	
 	num = (num >= 20) ? Math.trunc(num) : num
 	
-	var days = Math.floor(num / 86400);
-	num -= days * 86400;
-	var hours = Math.floor(num / 3600);
-	num -= hours * 3600;
-	var minutes = Math.floor(num / 60);
-	num -= minutes * 60;
-	var secs = Math.floor(num);
-	num -= secs;
-	var tenthofsecs = Math.floor(num * 10);
+	var days = Math.trunc( ( num / (24*60*60) ) ) 
+	
+	var hours = Math.trunc( ( num / (24*60) ) %24 ) 
+
+	var minutes = Math.trunc( ( num / (60) ) %60  )
+
+	var secs = Math.trunc( (num) %60 )
+
+	var tenthofsecs = Math.trunc( (num * 10) %10 )
 
 	var time = '';
 	if (days > 0) {
