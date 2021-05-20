@@ -17,7 +17,7 @@ function bpgn(gameA, gameB, movesA, movesB) {
 
 		if (mv[i].p == "A" && a < movesA.length) {
 			turnNum = Math.floor(a/2)+1
-			stamp = Math.max(1, (stampsA[a]/10).toFixed(3) )  //
+			stamp = Math.max(0.1, stampsA[a]/10 )  //
 			
 			out += " " + turnNum + set_piece_size(a,"A") + ". " + movesA[a] + " {" + stamp + "}" 
 
@@ -29,7 +29,7 @@ function bpgn(gameA, gameB, movesA, movesB) {
 				
 		if (mv[i].p == "B" && b < movesB.length) {
 			turnNum = Math.floor(b/2)+1
-			stamp = Math.max(1, (stampsB[b]/10).toFixed(3) )
+			stamp = Math.max(0.1, stampsB[b]/10)
 			
 			out += " " + turnNum + set_piece_size(b,"B") + ". " + movesB[b] + " {" + stamp + "}" 
 
