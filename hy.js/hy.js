@@ -1264,6 +1264,9 @@ function totime(numb) { //numb in secs
 	//Math.floor Round a number downward to its nearest integer
 	//Math.trunc() function returns the integer part of a number by removing any fractional digits.
 	var num = Math.abs(numb);
+	
+	num = (num >= 20) ? Math.trunc(num) : num
+	
 	var days = Math.floor(num / 86400);
 	num -= days * 86400;
 	var hours = Math.floor(num / 3600);
@@ -2233,7 +2236,7 @@ function bpgngettime() {
 		return BPGN_OMITED_TIME;
 	};
 	// nError = ERROR_NONE ;
-	return parseInt(ct);
+	return Number(ct);
 }
 
 // get result
