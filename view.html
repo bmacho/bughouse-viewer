@@ -219,6 +219,7 @@ if ( searchParams.has('game_id') ) {
 			<ul>
 				<li>bookmarklet: <a href="
 					javascript: void function() {
+						var flip = (document.getElementsByClassName('flipped')[0]) ? '&flip=true' : '';
 						var game_id = ''; 
 						if (location.pathname == '/live') {
 							game_id = location.hash.substr(3)
@@ -226,7 +227,7 @@ if ( searchParams.has('game_id') ) {
 						if (location.pathname.slice(0, 11) == '/game/live/') {
 							game_id = location.pathname.slice(11)
 						}; 
-						window.open('https://bmacho.github.io/bughouse-viewer/view.html?game_id=' + game_id, '_blank');
+						window.open('https://bmacho.github.io/bughouse-viewer/view.html?game_id=' + game_id + flip, '_blank');
 					}()
 					">[BHV]</a> or <a href="BHV-button-chesscom.user.js">userscript<a></a></li>
 				<li>code grabbed form SKA_cz's onlinea.eu</li>

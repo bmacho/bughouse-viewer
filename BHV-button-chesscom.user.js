@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BHV link to chess.com
 // @namespace    https://github.com/bmacho/bughouse-viewer/
-// @version      2021-05-19
+// @version      2021-05-22
 // @description  puts a BHV link under the diamond, into the left menubar
 // @author       bmacho
 // @match        https://www.chess.com/game/live/*
@@ -10,7 +10,6 @@
 // @grant        none
 // @run-at       document-idle
 // ==/UserScript==
-
 
 // waits until the menu appears, then calls add_button()
 (function wait(){
@@ -39,10 +38,12 @@ function openBHV() {
 
     let game_id = ""
 
+    let flip = (document.getElementsByClassName("flipped")[0]) ? "&flip=true" : ""
+
     if (location.pathname == "/live") game_id = location.hash.substr(3)
 
     if (location.pathname.slice(0, 11) == "/game/live/") game_id = location.pathname.slice(11)
 
-    window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id, "_blank")
+    window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip, "_blank")
 
 }
