@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         BHV link to chess.com
-// @namespace    https://github.com/bmacho/bughouse-viewer/
 // @version      2021-05-22
 // @description  puts a BHV link under the diamond, into the left menubar
 // @author       bmacho
 // @match        https://www.chess.com/game/live/*
 // @match        https://www.chess.com/live*
 // @icon         https://www.google.com/s2/favicons?domain=chess.com
+// @namespace    none
 // @grant        none
+// @updateURL    none
+// @downloadURL  none
 // @run-at       document-idle
 // ==/UserScript==
 
