@@ -14,9 +14,12 @@
 // ==/UserScript==
 
 // waits until the menu appears, then calls add_button()
+
+var sidebar = document.getElementById("sb");
+
 (function wait(){
-    var menu_exists = document.getElementsByClassName("menu top")[0];
-    if (menu_exists) {
+    sidebar = document.getElementById("sb");
+    if (sidebar) {
         add_button()
     } else {
     setTimeout(wait, 100);}})();
@@ -24,14 +27,18 @@
 
 function add_button() {
 
-    var review_button = document.createElement("strong");
+    var review_button = document.createElement("div");
+
 	review_button.innerHTML = "[review game]"
     review_button.style.textAlign = "center"
+    review_button.style.marginRight = "auto"
+    review_button.style.marginLeft = "auto"
+
     review_button.style.cursor = "pointer"
     review_button.addEventListener ("click", openBHV)
     review_button.addEventListener ("auxclick", openBHV)
 
-    document.getElementsByClassName("menu top")[0].appendChild(review_button)
+    sidebar.children[1].appendChild(review_button)
 
 }
 
