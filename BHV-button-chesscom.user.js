@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         BHV link to chess.com
-// @version      2021-05-22
+// @version      2021-05-24
 // @description  puts a BHV link under the diamond, into the left menubar
 // @author       bmacho
 // @match        https://www.chess.com/game/live/*
@@ -37,15 +37,20 @@ function add_button() {
 
 
 function openBHV() {
+	// i keep the semicolons so it can be copy pasted as bookmarklet
 
-    let game_id = ""
+    var game_id, flip ;
 
-    let flip = (document.getElementsByClassName("flipped")[0]) ? "&flip=true" : ""
+    if (location.pathname == "/live") {
+		flip = ( document.getElementsByClassName("flipped")[0].id == "game-board" ) ? "&flip=true" : "" ;
+		game_id = location.hash.substr(3) ;
+		} ;
 
-    if (location.pathname == "/live") game_id = location.hash.substr(3)
+    if (location.pathname.slice(0, 11) == "/game/live/") {
+		flip = ( document.getElementsByClassName("flipped")[0] ) ? "&flip=true" : "" ;
+		game_id = location.pathname.slice(11) ;
+		} ;
 
-    if (location.pathname.slice(0, 11) == "/game/live/") game_id = location.pathname.slice(11)
-
-    window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip, "_blank")
+    window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip, "_blank") ;
 
 }
