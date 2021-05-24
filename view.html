@@ -220,19 +220,25 @@ if ( searchParams.has('game_id') ) {
 		Try out our bookmarklet: <a href='
 					javascript: void function() {
 
-					var game_id, flip ;
+						var game_id, flip ;
 
-					if (location.pathname == "/live") {
-						flip = ( document.getElementsByClassName("flipped")[0].id == "game-board" ) ? "&flip=true" : "" ;
-						game_id = location.hash.substr(3) ;
-						} ;
+						if (location.pathname == "/live") {
 
-					if (location.pathname.slice(0, 11) == "/game/live/") {
-						flip = ( document.getElementsByClassName("flipped")[0] ) ? "&flip=true" : "" ;
-						game_id = location.pathname.slice(11) ;
-						} ;
+							game_id = location.hash.substr(3) ;
 
-					window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip, "_blank") ;
+							flip = ( document.getElementById("game-board" ).classList.contains("flipped") ) ? "&flip=true" : "" ;
+
+							} ;
+
+						if (location.pathname.slice(0, 11) == "/game/live/") {
+
+							game_id = location.pathname.slice(11) ;
+
+							flip = ( document.getElementById("board-dailyGame-" + game_id ).classList.contains("flipped") ) ? "&flip=true" : "" ;
+
+							} ;
+
+						window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip, "_blank") ;
 
 					}()
 					'>[BHV]</a> and <a href="BHV-button-chesscom.user.js">[userscript]</a>!
