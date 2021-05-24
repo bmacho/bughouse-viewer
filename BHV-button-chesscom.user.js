@@ -42,13 +42,19 @@ function openBHV() {
     var game_id, flip ;
 
     if (location.pathname == "/live") {
-		flip = ( document.getElementsByClassName("flipped")[0].id == "game-board" ) ? "&flip=true" : "" ;
+
 		game_id = location.hash.substr(3) ;
+
+		flip = ( document.getElementById("game-board" ).classList.contains("flipped") ) ? "&flip=true" : "" ;
+
 		} ;
 
     if (location.pathname.slice(0, 11) == "/game/live/") {
-		flip = ( document.getElementsByClassName("flipped")[0] ) ? "&flip=true" : "" ;
+
 		game_id = location.pathname.slice(11) ;
+
+		flip = ( document.getElementById("board-dailyGame-" + game_id ).classList.contains("flipped") ) ? "&flip=true" : "" ;
+
 		} ;
 
     window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip, "_blank") ;
