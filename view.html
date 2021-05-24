@@ -215,9 +215,9 @@ if ( searchParams.has('game_id') ) {
 
 	<div style="text-align: left;">
 		<div style="display: inline-block; text-align: left;">
-			<h2>What's new:</h2>
-			<ul>
-				<li>bookmarklet: <a href='
+		<br>
+		Feel free to open an <a href="https://github.com/bmacho/bughouse-viewer/issues">[issue]</a> for any bug, annoyance, suggestion! <br>
+		Try out our bookmarklet: <a href='
 					javascript: void function() {
 
 					var game_id, flip ;
@@ -235,7 +235,11 @@ if ( searchParams.has('game_id') ) {
 					window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip, "_blank") ;
 
 					}()
-					'>[BHV]</a> or <a href="BHV-button-chesscom.user.js">userscript<a></a></li>
+					'>[BHV]</a> and <a href="BHV-button-chesscom.user.js">[userscript]</a>!
+			<h2>What's new:</h2>
+			<ul>
+				<li>the bookmarklet and the userscript now recognise flips</li>
+				<li>the userscript does NOT auto update from now, so please update it manually</li>
 				<li>code grabbed form SKA_cz's onlinea.eu</li>
 				<li>drag and drop moves (code from SKA_cz)</li>
 				<li>last moves are now highlighted (SKA_cz or Wir?)</li>
