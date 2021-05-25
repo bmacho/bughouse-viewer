@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         BHV link to chess.com
-// @version      2021-05-24
-// @description  puts a BHV link under the diamond, into the left menubar
+// @version      2021-05-25
+// @description  puts a BHV link into the left menubar, below the diamond
 // @author       bmacho
 // @match        https://www.chess.com/game/live/*
 // @match        https://www.chess.com/live*
@@ -15,11 +15,11 @@
 
 // waits until the menu appears, then calls add_button()
 
-var sidebar = document.getElementById("sb");
+var sidebar_upper;
 
 (function wait(){
-    sidebar = document.getElementById("sb");
-    if (sidebar) {
+    sidebar_upper = document.getElementById("sb").children[1];
+    if ( sidebar_upper ) {
         add_button()
     } else {
     setTimeout(wait, 100);}})();
@@ -38,13 +38,13 @@ function add_button() {
     review_button.addEventListener ("click", openBHV)
     review_button.addEventListener ("auxclick", openBHV)
 
-    sidebar.children[1].appendChild(review_button)
+    sidebar_upper.appendChild(review_button)
 
 }
 
 
 function openBHV() {
-	// i keep the semicolons so it can be copy pasted as bookmarklet
+	// we put semicolons here so the code can be copy-pasted as a bookmarklet
 
     var game_id, flip ;
 
@@ -52,7 +52,7 @@ function openBHV() {
 
 		game_id = location.hash.substr(3) ;
 
-		flip = ( document.getElementById("game-board" ).classList.contains("flipped") ) ? "&flip=true" : "" ;
+		flip = ( document.getElementById("game-board").classList.contains("flipped") ) ? "&flip=true" : "" ;
 
 		} ;
 
@@ -60,7 +60,7 @@ function openBHV() {
 
 		game_id = location.pathname.slice(11) ;
 
-		flip = ( document.getElementById("board-dailyGame-" + game_id ).classList.contains("flipped") ) ? "&flip=true" : "" ;
+		flip = ( document.getElementById("board-dailyGame-" + game_id).classList.contains("flipped") ) ? "&flip=true" : "" ;
 
 		} ;
 
