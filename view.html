@@ -27,7 +27,9 @@
 <script>
 var searchParams = new URLSearchParams(window.location.search)
 
-var flip = (searchParams.get('flip') == "true" ) ? 'flip' :'noflip'
+var flip = ( searchParams.get('flip') == "true" || searchParams.get('flip') == "1" ) ? 'flip' : 'noflip'
+
+var hide_elo = ( searchParams.get('anon') == "true" || searchParams.get('anon') == "1") ? true : false
 </script>
 
 <script type="text/javascript">

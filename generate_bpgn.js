@@ -1,3 +1,5 @@
+// global variable: hide_elo
+
 function bpgn(gameA, gameB, movesA, movesB) {
 	mv = JSON.parse( getMoveOrder(gameA, gameB) )
 
@@ -44,7 +46,12 @@ function bpgn(gameA, gameB, movesA, movesB) {
 
 	console.log(mv)
 
-	out += "{" + gameA.game.resultMessage + "}  *"
+// if hide_elo is declared and true than we don't show elo 
+let show_elo = !( typeof hide_elo !== 'undefined' && hide_elo == true )
+
+let resMes = ( show_elo ) ? gameA.game.resultMessage : "game over"
+
+	out += "{" + resMes + "}  *"
 	return out
 }
 
@@ -118,24 +125,44 @@ function getMoveOrder (gameA, gameB) {
 
 
 function bpgn_header ( ) {
+	
+// if hide_elo is declared and true than we don't show elo 
+let show_elo = !( typeof hide_elo !== 'undefined' && hide_elo == true )
+	
+let Aname = show_elo ? gameA.game.pgnHeaders.White : "SouthWest"
+let aname = show_elo ? gameA.game.pgnHeaders.Black : "NordWest"
+let Bname = show_elo ? gameB.game.pgnHeaders.White : "NordEast"
+let bname = show_elo ? gameB.game.pgnHeaders.Black : "SouthEast"
+
+
+function getRandomInt(min, max) { min = Math.ceil(min); max = Math.floor(max); return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
+
+
+let Aelo = show_elo ? gameA.game.pgnHeaders.WhiteElo : getRandomInt(100,3000) + "?"
+let aelo = show_elo ? gameA.game.pgnHeaders.BlackElo : getRandomInt(100,3000) + "?"
+let Belo = show_elo ? gameB.game.pgnHeaders.WhiteElo : getRandomInt(100,3000) + "?"
+let belo = show_elo ? gameB.game.pgnHeaders.BlackElo : getRandomInt(100,3000) + "?"
+
+
 	var bpgn_string="";
 	bpgn_string += '[Event "'+gameA.game.pgnHeaders.Event+'"]\n'
 	bpgn_string += '[Site "'+gameA.game.pgnHeaders.Site+'"]\n'
 	bpgn_string += '[Date "'+gameA.game.pgnHeaders.Date+'"]\n'									// possibly the end date in PDT?
 	bpgn_string += '[Time "'+gameA.game.pgnHeaders.EndTime+'"]\n' 							// this is the time of the end of a match
 																												// TODO: substract game length from it
-	bpgn_string += '[WhiteA "'+gameA.game.pgnHeaders.White+'"][WhiteAElo "'+gameA.game.pgnHeaders.WhiteElo+'"]\n'
-	bpgn_string += '[BlackA "'+gameA.game.pgnHeaders.Black+'"][BlackAElo "'+gameA.game.pgnHeaders.BlackElo+'"]\n'
-	bpgn_string += '[WhiteB "'+gameB.game.pgnHeaders.White+'"][WhiteBElo "'+gameB.game.pgnHeaders.WhiteElo+'"]\n'
-	bpgn_string += '[BlackB "'+gameB.game.pgnHeaders.Black+'"][BlackBElo "'+gameB.game.pgnHeaders.BlackElo+'"]\n'
+	bpgn_string += '[WhiteA "'+Aname+'"][WhiteAElo "'+Aelo+'"]\n'
+	bpgn_string += '[BlackA "'+aname+'"][BlackAElo "'+aelo+'"]\n'
+	bpgn_string += '[WhiteB "'+Bname+'"][WhiteBElo "'+Belo+'"]\n'
+	bpgn_string += '[BlackB "'+bname+'"][BlackBElo "'+belo+'"]\n'
 	bpgn_string += '[TimeControl "'+gameA.game.pgnHeaders.TimeControl+'"]\n'
 	bpgn_string += '[Result "'+gameA.game.pgnHeaders.Result+'"]\n\n'
 	
 	bpgn_string += '{C:' + gameA.game.pgnHeaders.Date + ' ' +  gameA.game.pgnHeaders.EndTime + ' bughouse game between ' +
-		gameA.game.pgnHeaders.White + ' (' +  gameA.game.pgnHeaders.WhiteElo +') and ' +
-		gameB.game.pgnHeaders.Black + ' (' +  gameB.game.pgnHeaders.BlackElo +') vs. ' +
-		gameA.game.pgnHeaders.Black + ' (' +  gameA.game.pgnHeaders.BlackElo +') and ' +
-		gameB.game.pgnHeaders.White + ' (' +  gameB.game.pgnHeaders.WhiteElo +').' +
+		Aname + ' (' +  Aelo +') and ' +
+		bname + ' (' +  belo +') vs. ' +
+		aname + ' (' +  aelo +') and ' +
+		Bname + ' (' +  Belo +').' +
 		'\nboard A: chess.com/live/game/' + gameA.game.id + 
 		'\nboard B: chess.com/live/game/' + gameB.game.id + 
 	'}'
