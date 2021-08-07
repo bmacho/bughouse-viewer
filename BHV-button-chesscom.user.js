@@ -18,7 +18,7 @@
 var sidebar_upper;
 
 (function wait(){
-    sidebar_upper = document.getElementById("sb").children[1];
+    sidebar_upper = document.getElementById("sb").children[2];
     if ( sidebar_upper ) {
         add_button()
     } else {
