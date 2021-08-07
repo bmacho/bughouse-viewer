@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         BHV link to chess.com
-// @version      2021-05-25
+// @version      2021-08-07
 // @description  puts a BHV link into the left menubar, below the diamond
 // @author       bmacho
 // @match        https://www.chess.com/game/live/*
