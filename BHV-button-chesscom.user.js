@@ -5,7 +5,7 @@
 // @author       bmacho
 // @match        https://www.chess.com/game/live/*
 // @match        https://www.chess.com/live*
-// @icon         https://www.google.com/s2/favicons?domain=chess.com
+// @icon         data:image/gif;base64,R0lGODlhEAAQAPIAAAAAAE13N2CQPG6fQpK7SAAAAAAAAAAAACH5BAUKAAAALAAAAAAQABAAAAM1CLrTsxAKQlqI0VksnbgcM3yhaIGcoH1oGrylSMZAM5fO22a5zmkDHSwiUBWFO6SQFVEKFwkAOw==
 // @namespace    none
 // @grant        none
 // @updateURL    none
