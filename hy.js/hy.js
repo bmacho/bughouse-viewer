@@ -1377,8 +1377,31 @@ function generatebfen() {
 	
 	castles = K + Q + k + q
 	
-	res += ' ' + whosmove(this.turn) + ' ' + castles + ' ' + this.wclock + ' ' + this.bclock;
+	res += ' ' + whosmove(this.turn) + ' ' + castles // + ' ' + Math.floor(this.wclock) + ' ' + Math.floor(this.bclock);
 	return res;
+}
+
+function bfen_to_bracket_notation(bfen) {
+	// converts the bfen from "position/hand" format to "position[hand]" format
+	// tested on
+	// "1/2/3/4/5/6/7/8 a b c d"
+	// "1/2/3/4/5/6/7/8/ a b c d"
+	// "1/2/3/4/5/6/7/8/hand a b c d"
+	// "1/2/3/4/5/6/7/8[hand] a b c d"
+	
+	if ( bfen.includes("[") ) {
+		return bfen
+	} else {
+	
+		let board, rest, position, hand
+		
+		[board, ...rest] = bfen.split(' ')
+		position = board.split('/').slice(0,8).join('/')
+		hand = board.split('/').slice(8)
+	
+		return position + '[' + hand + '] ' + rest.join(' ')
+	
+	}
 }
 
 
@@ -4842,6 +4865,11 @@ function drawcontrol(color, mode) {
 
 		t += '<input type="button" value=" &lt;&lt;" onclick="assundomove(' + bc + ',' + "'a','" + this.viewername + "'" + ')">';
 		t += '<input type="button" value=" &lt; " onclick="assundomove(1,' + "'a','" + this.viewername + "'" + ')">';
+
+		t += '<input type="button" value="analyse" onclick="window.open('  ;
+		t += " 'https://online-drophouse-stockfish.herokuapp.com/analysis.html?fen=' + bfen_to_bracket_notation( window.v1.a.generatebfen() " ;
+		t += "),'_blank'" + ')">';
+		    
 		t += '<input type="button" value=" &gt; " onclick="assforward(1,' + "'a','" + this.viewername + "'" + ',0)">';
 		t += '<input type="button" value="&gt;&gt; " onclick="assforward(' + bc + ',' + "'a','" + this.viewername + "'" + ',0)">';
 
@@ -4880,6 +4908,11 @@ function drawcontrol(color, mode) {
 		t += '<td align="center" valign="top">';
 		t += '<input type="button" value=" &lt;&lt;" onclick="assundomove(' + bc + ',' + "'b','" + this.viewername + "'" + ')">';
 		t += '<input type="button" value=" &lt; " onclick="assundomove(1,' + "'b','" + this.viewername + "'" + ')">';
+
+		t += '<input type="button" value="analyse" onclick="window.open('  ;
+		t += " 'https://online-drophouse-stockfish.herokuapp.com/analysis.html?fen=' + bfen_to_bracket_notation( window.v1.b.generatebfen() " ;
+		t += "),'_blank'" + ')">';
+		
 		t += '<input type="button" value=" &gt; " onclick="assforward(1,' + "'b','" + this.viewername + "'" + ',0)">';
 		t += '<input type="button" value="&gt;&gt; " onclick="assforward(' + bc + ',' + "'b','" + this.viewername + "'" + ',0)">';
 		t += '</td>';
