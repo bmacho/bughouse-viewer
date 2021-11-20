@@ -117,7 +117,7 @@ function main (game_id) {
 
 		gameB_id = gameA.game.partnerGameId
 
-		$.getJSON( proxyurl + gameurl + gameB_id, function( json_reply ) {
+		$.getJSON( proxyurl + gameB_id, function( json_reply ) {
 			gameB = json_reply;
 					
 			movesA = parseMoveList(gameA.game.moveList)
