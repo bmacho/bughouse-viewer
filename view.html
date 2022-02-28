@@ -98,7 +98,7 @@ function main (game_id) {
 	queryParams.set("game_id", game_id);
 	history.replaceState(null, null, "?"+queryParams.toString());
 
-	proxyurl = "https://api.allorigins.win/raw?url="
+	proxyurl = "https://chess-com-proxy.bmacho.workers.dev/game/"
 	// browser can't call the chess.com callback url directly bc of CORS restrictions
 	// so we use a random proxy provided by allorigins.win 
 
@@ -106,19 +106,18 @@ function main (game_id) {
 	// this part is for the case when someone opened a game that was currently played
 	// and cloudflare cached the empty string forever
 	
+	random = ""
 	if ( !main_firsttry ) {
-		proxyurl = "https://api.allorigins.win/raw?date=" + new Date().getTime() + "&url="
+		random = "/" + new Date().getTime()
 	}
 
-	gameurl = "https://www.chess.com/callback/live/game/" // https://www.chess.com/callback/live/game/[GAME_ID] where the data lives 
-
-	$.getJSON( proxyurl + gameurl + game_id, function( json_reply ) {
+	$.getJSON( proxyurl + game_id + random, function( json_reply ) {
 		
 		gameA = json_reply;
 
 		gameB_id = gameA.game.partnerGameId
 
-		$.getJSON( proxyurl + gameurl + gameB_id, function( json_reply ) {
+		$.getJSON( proxyurl + gameB_id, function( json_reply ) {
 			gameB = json_reply;
 					
 			movesA = parseMoveList(gameA.game.moveList)
