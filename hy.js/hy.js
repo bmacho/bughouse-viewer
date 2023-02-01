@@ -4866,9 +4866,9 @@ function drawcontrol(color, mode) {
 		t += '<input type="button" value=" &lt;&lt;" onclick="assundomove(' + bc + ',' + "'a','" + this.viewername + "'" + ')">';
 		t += '<input type="button" value=" &lt; " onclick="assundomove(1,' + "'a','" + this.viewername + "'" + ')">';
 
-//		t += '<input type="button" value="analyse" onclick="window.open('  ;
-//		t += " 'https://online-drophouse-stockfish.herokuapp.com/analysis.html?fen=' + bfen_to_bracket_notation( window.v1.a.generatebfen() " ;
-//		t += "),'_blank'" + ')">';
+		t += '<input type="button" value="analyse" onclick="window.open('  ;
+		t += " 'https://online-dropchess-stockfish.onrender.com//analysis.html?fen=' + bfen_to_bracket_notation( window.v1.a.generatebfen() " ;
+		t += "),'_blank'" + ')">';
 		    
 		t += '<input type="button" value=" &gt; " onclick="assforward(1,' + "'a','" + this.viewername + "'" + ',0)">';
 		t += '<input type="button" value="&gt;&gt; " onclick="assforward(' + bc + ',' + "'a','" + this.viewername + "'" + ',0)">';
@@ -4909,9 +4909,9 @@ function drawcontrol(color, mode) {
 		t += '<input type="button" value=" &lt;&lt;" onclick="assundomove(' + bc + ',' + "'b','" + this.viewername + "'" + ')">';
 		t += '<input type="button" value=" &lt; " onclick="assundomove(1,' + "'b','" + this.viewername + "'" + ')">';
 
-//		t += '<input type="button" value="analyse" onclick="window.open('  ;
-//		t += " 'https://online-drophouse-stockfish.herokuapp.com/analysis.html?fen=' + bfen_to_bracket_notation( window.v1.b.generatebfen() " ;
-//		t += "),'_blank'" + ')">';
+		t += '<input type="button" value="analyse" onclick="window.open('  ;
+		t += " 'https://online-dropchess-stockfish.onrender.com/analysis.html?fen=' + bfen_to_bracket_notation( window.v1.b.generatebfen() " ;
+		t += "),'_blank'" + ')">';
 		
 		t += '<input type="button" value=" &gt; " onclick="assforward(1,' + "'b','" + this.viewername + "'" + ',0)">';
 		t += '<input type="button" value="&gt;&gt; " onclick="assforward(' + bc + ',' + "'b','" + this.viewername + "'" + ',0)">';
