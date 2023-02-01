@@ -4867,7 +4867,7 @@ function drawcontrol(color, mode) {
 		t += '<input type="button" value=" &lt; " onclick="assundomove(1,' + "'a','" + this.viewername + "'" + ')">';
 
 		t += '<input type="button" value="analyse" onclick="window.open('  ;
-		t += " 'https://online-dropchess-stockfish.onrender.com//analysis.html?fen=' + bfen_to_bracket_notation( window.v1.a.generatebfen() " ;
+		t += " 'https://online-dropchess-stockfish.onrender.com/analysis.html?fen=' + bfen_to_bracket_notation( window.v1.a.generatebfen() " ;
 		t += "),'_blank'" + ')">';
 		    
 		t += '<input type="button" value=" &gt; " onclick="assforward(1,' + "'a','" + this.viewername + "'" + ',0)">';
