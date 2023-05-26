@@ -88,10 +88,6 @@ document.body.addEventListener('paste', handlePaste)
 
 var gameA, gameB, movesA, movesB
 
-
-
-var main_firsttry = true
-
 function main (game_id) {
 	// change the url: 	
 	var queryParams = new URLSearchParams(window.location.search);
@@ -100,45 +96,62 @@ function main (game_id) {
 
 	proxyurl = "https://chess-com-proxy.bmacho.workers.dev/game/"
 	// browser can't call the chess.com callback url directly bc of CORS restrictions
-	// so we use a random proxy provided by allorigins.win 
+	// so I've set up a cloudflare worker proxy 
 
+	game_id = parseInt(game_id)
 
-	// this part is for the case when someone opened a game that was currently played
-	// and cloudflare cached the empty string forever
+	var game_id_diff = game_id > 7000000000 ? 2 : 1  // before id 7000000000 corresponing games typically were 1 id away, and after that id they are typically 2 id away (there are some exceptions tho)
 	
-	random = ""
-	if ( !main_firsttry ) {
-		random = "/" + new Date().getTime()
-	}
+	var getgameA = $.getJSON( proxyurl + game_id )
+	var BLid = game_id - game_id_diff
+	var BUid = game_id + game_id_diff
+	var getgameBl = $.getJSON( proxyurl + BLid )
+	var getgameBu = $.getJSON( proxyurl + BUid )
 
-	$.getJSON( proxyurl + game_id + random, function( json_reply ) {
+	$.when( getgameA, getgameBl, getgameBu ).done( function( json_replyA, json_replyBl, json_replyBu ) {
 		
-		gameA = json_reply;
+		
+		gameA = json_replyA[0]
 
-		gameB_id = gameA.game.partnerGameId
+		var BU = json_replyBu[0]
+		var BL = json_replyBl[0]
 
-		$.getJSON( proxyurl + gameB_id, function( json_reply ) {
-			gameB = json_reply;
-					
-			movesA = parseMoveList(gameA.game.moveList)
-			movesB = parseMoveList(gameB.game.moveList)
+		var Bu_isbh = (BU.game == undefined) ? false : BU.game.type == "bughouse" 
+		var Bl_isbh = (BL.game == undefined) ? false : BL.game.type == "bughouse"
 
-			var bpgn1
-
-			bpgn1 = bpgn(gameA, gameB, movesA, movesB)
+		if ( Bu_isbh && !Bl_isbh ) {
+			console.log( " lower game not bughouse, but upper game is bughouse, choose that " )
+			gameB = BU
+		} else if ( !Bu_isbh && Bl_isbh ) {
+			console.log( " upper game not bughouse, but lower game is bughouse, choose that " )
+			gameB = BL
+		} else if ( Bu_isbh && Bl_isbh ) {
+			// both of the nearby games are bughouse
+			// TODO: inform the user
+			// provide a sane default
+			// provide a way to choose the other game
 			
-			console.log(bpgn1)
+			// currently we choose the game with the lower id 
+			// so if that's not the corresponding game, increment the id 2 or 1
+			
+			gameB = BL
 
-			v1.reloadgame(bpgn1, "", "")
-			assforward(999,'c','v1',0)
-		});	
-	})
-	.fail(function() { 
-		if ( main_firsttry ) {	
-			console.log("we couldn't get the game first time. Was it a caching issue? We must try it again") 
-			main_firsttry = false
-			main(game_id)
+			console.log( "both of the nearby games are bughouse, we chose the one with the lower id. If thats not the corresponding game, try to open ", BUid    )
+		} else {
+			console.log( "couldn't find the game for the B board" )
 		}
+		
+		movesA = parseMoveList(gameA.game.moveList)
+		movesB = parseMoveList(gameB.game.moveList)
+
+		var bpgn1
+
+		bpgn1 = bpgn(gameA, gameB, movesA, movesB)
+		
+		console.log(bpgn1)
+
+		v1.reloadgame(bpgn1, "", "")
+		assforward(999,'c','v1',0)
 	});
 }
 
@@ -192,31 +205,6 @@ if ( searchParams.has('game_id') ) {
 	document.addEventListener('contextmenu', event => event.preventDefault());
 </script>
 
-<br>
-
-
-
-<style>
-
-.under-construction {
-  position: absolute;
-  top: 500px;
-  background-color: red;
-  color: white;
-  text-align: center;
-  padding: 20px;
-  width: 980px;
-  height: 2em;
-}
-
-</style>
-
-<div class="under-construction">
-  <h2>Currently not working, please come back later.</h2>
-</div>
-
-
-
 <style>
 
 	#forkongithub a{background:#083;color:#fff;text-decoration:none;font-family:arial,sans-serif;text-align:center;font-weight:bold;padding:5px 40px;font-size:1rem;line-height:2rem;position:relative;transition:0.5s;}
@@ -268,6 +256,10 @@ if ( searchParams.has('game_id') ) {
 					'>[BHV]</a> and <a href="BHV-button-chesscom.user.js">[userscript]</a>!
 			<h2>What's new:</h2>
 			<ul>
+				<li>from May 21, 2023, chess.com doesn't provide the id of the other board. If your game is not loading, it may be due to that. 
+				I implemented some heuristics, but it doesn't work every case. 
+					<br> It checks the games with nearby ids if they are bughouse, and choose the bughouse one for the partner board. 
+					If both are bughouses this approach is not working. It chooses the game with the lower id for board B, if that's the wrong game, increment your id 2 (or 1, if the game is older than 2021.02.18).</li>
 				<li>the bookmarklet and the userscript now recognise flips</li>
 				<li>the userscript does NOT auto update from now, so please update it manually</li>
 				<li>code grabbed form SKA_cz's onlinea.eu</li>
