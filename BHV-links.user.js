@@ -1,12 +1,13 @@
 // ==UserScript==
 // @name         BHV links for chess.com
-// @version      2023.06.01
+// @version      2023.06.02
 // @description  puts a BHV button into the left menubar, replaces archive game links to BHV links
 // @author       bmacho
 
 // @match        https://www.chess.com/game/live/*
 // @match        https://www.chess.com/games/archive*
 // @match        https://www.chess.com/member/*
+// @match        https://www.chess.com/play/online*
 
 // @icon         data:image/gif;base64,R0lGODlhEAAQAPIAAAAAAE13N2CQPG6fQpK7SAAAAAAAAAAAACH5BAUKAAAALAAAAAAQABAAAAM1CLrTsxAKQlqI0VksnbgcM3yhaIGcoH1oGrylSMZAM5fO22a5zmkDHSwiUBWFO6SQFVEKFwkAOw==
 
@@ -23,11 +24,12 @@ let is_member    = location.pathname.slice(0, 8)  == "/member/"
 let is_archive   = location.pathname.slice(0, 15) == "/games/archive/"
 
 let is_livegame   = location.pathname.slice(0, 11) == "/game/live/"
+let is_play_onl   = location.pathname.slice(0, 12) == "/play/online"
 
 
 
 
-if ( put_BHV_button && is_livegame ) {
+if ( put_BHV_button && ( is_livegame || is_play_onl ) ) {
 
     console.log( "live game or an archive" )
 
