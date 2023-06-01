@@ -76,11 +76,13 @@ function handlePaste (e) {
 	document.getElementById('pasteHere').remove()
 
 	// Do whatever with pasteddata
-	main( numbers_in_string(pastedData) )
+	main( first_numbers_in_string(pastedData) )
 }
 
-function numbers_in_string (s) {
-	return s.match(/\d/g).join('')}
+function first_numbers_in_string (s) {
+	let nums = s.match(/\d+/g)
+	return nums ? nums[0] : null
+}
 
 
 document.getElementById('pasteHere').addEventListener('paste', handlePaste)
@@ -156,7 +158,7 @@ function main (game_id) {
 }
 
 if ( searchParams.has('game_id') ) {
-		main( numbers_in_string( searchParams.get("game_id") ) )
+		main( first_numbers_in_string( searchParams.get("game_id") ) )
 	} else {
 		document.getElementById("pasteHere").style.visibility = "visible"
 		document.getElementById('pasteHere').addEventListener('paste', handlePaste)
