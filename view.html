@@ -246,16 +246,17 @@ if ( searchParams.has('game_id') ) {
 						} ;
 
 					}()
-					'>[BHV]</a> and <a href="BHV-button-chesscom.user.js">[userscript]</a>!
+					'>[BHV]</a> and <a href="https://github.com/bmacho/bughouse-viewer/raw/main/BHV-links.user.js">[userscript]</a>!
 			<h2>What's new:</h2>
 			<ul>
+				<li>userscript fixed, improved, should redirect bughouse links from archive pages and member pages, also auto updates again</li>
 				<li>bookmarklet fixed</li>
 				<li>from May 21, 2023, chess.com doesn't provide the id of the other board. If your game is not loading, it may be due to that. 
 				I implemented some heuristics, but it doesn't work every case. 
 					<br> It checks the games with nearby ids if they are bughouse, and choose the bughouse one for the partner board. 
 					If both are bughouses this approach is not working. It chooses the game with the lower id for board B, if that's the wrong game, increment your id 2 (or 1, if the game is older than 2021.02.18).</li>
 				<li>the bookmarklet and the userscript now recognise flips</li>
-				<li>the userscript does NOT auto update from now, so please update it manually</li>
+				<li><s>the userscript does NOT auto update from now, so please update it manually</s></li>
 				<li>code grabbed from onlinea.eu (SKA_cz and Wir) :
 					<ul>
 						<li>drag and drop moves</li>
