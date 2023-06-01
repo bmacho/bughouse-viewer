@@ -232,30 +232,22 @@ if ( searchParams.has('game_id') ) {
 		Try out our bookmarklet: <a href='
 					javascript: void function() {
 
-						var game_id, flip ;
-
-						if (location.pathname == "/live") {
-
-							game_id = location.hash.substr(3) ;
-
-							flip = ( document.getElementById("game-board" ).classList.contains("flipped") ) ? "&flip=true" : "" ;
-
-							} ;
-
 						if (location.pathname.slice(0, 11) == "/game/live/") {
 
 							game_id = location.pathname.slice(11) ;
+							board_obj = document.getElementById("board-single") ;
 
-							flip = ( document.getElementById("board-dailyGame-" + game_id ).classList.contains("flipped") ) ? "&flip=true" : "" ;
+							flip = board_obj ? board_obj.classList.contains("flipped") ? "&flip=true" : "" : "" ;
 
-							} ;
+							window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip, "_blank") ;
 
-						window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip, "_blank") ;
+						} ;
 
 					}()
 					'>[BHV]</a> and <a href="BHV-button-chesscom.user.js">[userscript]</a>!
 			<h2>What's new:</h2>
 			<ul>
+				<li>bookmarklet fixed</li>
 				<li>from May 21, 2023, chess.com doesn't provide the id of the other board. If your game is not loading, it may be due to that. 
 				I implemented some heuristics, but it doesn't work every case. 
 					<br> It checks the games with nearby ids if they are bughouse, and choose the bughouse one for the partner board. 
