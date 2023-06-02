@@ -270,6 +270,28 @@ function unHighlightAll() {
 }
 
 
+function setCoordinates() {
+	// sets the coordinates for a board
+	// attached to a and b
+	
+	let bd = this.boardname
+	let flip = this.flip
+	
+	for (let i = 1; i<=8; i++) {
+		let vcoordId  = 'coordinates1' + bd + String(i)
+		let vcholder   = document.getElementById(vcoordId)
+		vcholder.innerHTML = String( !flip ? 8-i+1 : i)
+		
+		let hcoordId  = 'coordinates2' + bd + String(i)
+		let hcholder   = document.getElementById(hcoordId)
+		hcholder.innerHTML = String.fromCharCode( !flip ? i+96 : 105-i)
+	}
+	
+
+}
+
+
+
 
 
 function debug() {
@@ -3304,6 +3326,8 @@ function getbpgnheaders(bpgntext) {
 }
 
 function drawboard() /* generates html for the board */ {
+	let flip = this.flip
+
 	var size = this.sqsize;
 	var sqsize = 'width="' + size + 'px" height="' + size + 'px"';
 
@@ -3359,6 +3383,10 @@ function drawboard() /* generates html for the board */ {
 	t += '<TABLE BORDER=0 CELLSPACING=0 CELLPADDING=0 COLS=8>';
 	for (i = 0; i < 8; i++) {
 		t += '<tr>';
+		
+		{// vertical coordinates
+			t+='<td id="coordinates1'+bd+String(i+1)+'" style="padding: 1px 2px 0 0; text-align: center; font-size:12px;">'+String(!flip ? 7-i+1 : i+1)+'</td>';
+		}		
 		for (j = 0; j < 8; j++) {
 			ind = 8 * i + j;
 			//t+='<td id="tdsquare'+bd+ind+'"'+ ((this.filebg)?'BACKGROUND="':'BGCOLOR="')+ ((i + j) % 2 ? this.gifs["b"] : this.gifs["w"]);
@@ -3378,6 +3406,15 @@ function drawboard() /* generates html for the board */ {
 		/* onMouseDown="assmdown('+ind+",'"+this.viewername+"','"+bd+"');"+'" onMouseUp="assmup('+ind+",'"+this.viewername+"','"+bd+"');"+'" */
 		t += '</tr>';
 	};
+	
+    { // horizontal coordinates
+		t+='<tr id="coords2'+bd+'" style="text-align: center; font-size:12px"><td></td>';
+		for (i=1; i<=8; i++) {
+		  t+='<td style="padding: 2px 0 0 0"; id="coordinates2'+bd+i+'">'+( String.fromCharCode( !flip ? i+96 : 105-i) )+'</td>';
+		}
+		t+='</tr>';
+	}
+	
 	t += '</table>';
 	t.length -= 4;
 	insert(t, t.indexOf("height") + 11, ' name="' + this.viewername + bd + 'uleft">');
@@ -4337,6 +4374,12 @@ function flipboard(viewer) {
 	
 	b_highlights = [...v.b.highlightedSquares]
 	v.b.Highlight(...b_highlights)
+	
+	// handle the coordinates
+	
+	v.a.setCoordinates()
+	v.b.setCoordinates()
+	
 }
 
 
@@ -5325,6 +5368,8 @@ function board(name, dropbar, gifs, viewername, whitepl, blackpl, welo, belo, di
 	this.Highlight = Highlight
 	this.unHighlightAll = unHighlightAll;
 	this.highlightedSquares = []
+	
+	this.setCoordinates = setCoordinates;
 }
 
 function setmoven() {
