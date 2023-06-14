@@ -348,23 +348,6 @@ function readfile(viewer, file) {
 	};
 };
 
-function loadfile() {
-	var i;
-	var n = BPGN_FILE_NAME.length;
-	if (n == 0) {
-		clearInterval(READ_INTERVAL);
-		READ_INTERVAL = false;
-		return;
-	};
-	var tmp = BPGN_FILE_NAME[0];
-	for (i = 0; i < n - 1; i++) BPGN_FILE_NAME[i] = BPGN_FILE_NAME[i + 1];
-	BPGN_FILE_NAME[n - 1] = false;
-	BPGN_FILE_NAME.length = n - 1;
-	if ((!READ_WINDOW) || (READ_WINDOW.closed)) {
-		READ_WINDOW = window.open(BPGN_VIEWER_DIR + 'readfile.shtml?' + tmp, 'bpgnfilereadwindow', 'width=300,height=300');
-	};
-	READ_INTERVAL = setInterval("loadfile();", 100);
-}
 
 function setvar(text) {
 	var i;
@@ -380,28 +363,27 @@ function setvar(text) {
 
 
 function generatesavehtml() {
-	var tmp;
-	tmp = '<html><head><title>Save BPGN</title><link href="fonts/TestWebFontsForBughouseChess2021.css" rel="stylesheet" type="text/css"></head>'
-	tmp += '<body bgcolor="#FFFFFF" text="#000000">';
-	tmp += '<p align="center"><font color="#C0C0C0" size="6">Save BPGN</font></p>';
-	tmp += '<form name="saveform">';
-	tmp += '<p><textarea id="bpgntextarea" name="bpgn" rows="10" cols="80"></textarea></p>';
-	tmp += '<p>' + GenerateSaveTextFile() + '</p>';
-	tmp += '<p><strong>BFEN A:</strong><input type="text" size="70"';
-	tmp += ' name="bfena"></p>';
-	tmp += '<p><strong>BFEN B:</strong><input type="text" size="70"';
-	tmp += ' name="bfenb"></p>';
-	tmp += ' <p>Here is BPGN text for the game and BFEN for the current';
-	tmp += ' position. Cut&amp;Paste them into your favorite text editor';
-	tmp += ' and save. Or download and save it on disk. <br/>Click &quot;Close&quot; button to close this';
-	tmp += ' window. </p>';
-	tmp += '<p><strong>RTF Text of (double) position:</strong></p>';
-	tmp += '<p><textarea class="bughousechess24" id="textareaRTFtextposition" name="RTFtextposition" rows="14" cols="30"></textarea></p>';
-	//tmp+='<p class="bughousechess24">&nbsp;&nbsp;&nbsp;,t,m, , ,  , , , , , ,<br/>>!""""""""#!""""""""# <br/>&nbsp;$t+ +lVg+%$ Kq+ B R% <br/>&nbsp;$OoOvWoPy%$Pn+b+pPp% <br/>&nbsp;$ +m+oOm+%$ +nOp+ +% <br/>&nbsp;$+ +o+ + %$R Op+ + % <br/>&nbsp;$ + P + +%$oW O V +% <br/>&nbsp;$P N PpP %$+ + +m+ % <br/>&nbsp;$ Pp+ +bP%$ Oo+ OoO% <br/>&nbsp;$R BqK + %$T +l+ +t% <br/>&nbsp;/(((((((()/(((((((()<<br/>&nbsp;  , , , ,p,  , , , ,v<br/></p>';
-	tmp += ' <p><input type="button" name="confirm" value="Close"';
-	tmp += ' onclick="window.close();"></p>';
-	tmp += '</form></body></html>';
-	return tmp;
+	
+	return `<html>
+   <head>
+      <title>Save BPGN</title>
+   </head>
+   <body bgcolor="#FFFFFF" text="#000000">
+      <p align="center"><font color="#C0C0C0" size="6">Save BPGN</font></p>
+      <form name="saveform">
+         <p><textarea id="bpgntextarea" name="bpgn" rows="10" cols="80"></textarea></p>
+         <p>
+         ${GenerateSaveTextFile()}
+         </p>
+         <p><strong>BFEN A:</strong><input type="text" size="70" name="bfena"></p>
+         <p><strong>BFEN B:</strong><input type="text" size="70" name="bfenb"></p>
+         <p>Here is BPGN text for the game and BFEN for the current position. Cut&amp;Paste them into your favorite text editor and save. Or download and save it on disk. <br>Click "Close" button to close this window. </p>
+         <p><strong>RTF Text of (double) position:</strong></p>
+         <p><textarea id="textareaRTFtextposition" name="RTFtextposition" rows="14" cols="30"></textarea></p>
+         <p><input type="button" name="confirm" value="Close" onclick="window.close();"></p>
+      </form>
+   </body>
+</html>`
 }
 
 
@@ -1475,7 +1457,7 @@ function generateRTFTextPosition(fiWhiteUp) {
 		*/
 	}
 
-	return res;
+	return "(Not working, pls fix generateRTFTextPosition)";
 }
 
 
