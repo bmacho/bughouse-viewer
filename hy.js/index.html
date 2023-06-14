@@ -11,13 +11,12 @@
 
 <center>
 	
-	<h1> Choose a game: </h1>
+	<h1> Choose a game of Bughouse Grand Prix 1 - Finals (March 3, 2001) :</h1>
 
 <!-- taken from http://bughouse.net/training_center/master_games/games_viewable_online/gp1_finals.htm -->
 
 	<form name="bugmenu">
 		<select name="games" size="1" onChange="choosegame('v1',this.selectedIndex);;">
-			<option>Bughouse Grand Prix 1 - Finals (March 3, 2001)
 			<option>Tecumseh(2167)/LINDEGREN(2360) v ChaseJr(2179)/Marat(2193) 1-0
 			<option>LINDEGREN(2366)/Tecumseh(2173) v Marat(2187)/ChaseJr(2173) 1-0
 			<option>Marat(2181)/ChaseJr(2167) v LINDEGREN(2372)/Tecumseh(2179) 1-0
@@ -39,10 +38,10 @@
 
 <br>
 
-<script><!--
-			
+<script>
+	
 function choosegame(viewer, ind) {
-	if (ind < 1) { return; }
+	ind += 1;
 	var v = eval(viewer)
 	var t = eval("bpgn" + ind)
 	v.reloadgame(t, "")
@@ -68,7 +67,8 @@ bpgn13='[Event "fics rated bughouse match"][Site "fics, Oklahoma City, OK USA"][
 bpgn14='[Event "fics rated bughouse match"][Site "fics, Oklahoma City, OK USA"][Date "2001.03.03"][WhiteA "LINDEGREN"][WhiteAElo "2357"][BlackA "ChaseJr"][BlackAElo "2176"][WhiteB "Tecumseh"][WhiteBElo "2166"][BlackB "Marat"][BlackBElo "2200"][TimeControl "180+0"][Result "0-1"]1A. e4 {179} 1a. d5 {180} 1B. d4 {177} 1b. Nf6 {179} 2A. exd5 {177}2a. e6 {179} 2B. Nf3 {176} 3A. d4 {177} 2b. e6 {179} 3a. exd5 {179}3B. Nc3 {175} 4A. Nc3 {177} 3b. d5 {178} 4a. Nf6 {179} 4B. Ne5 {174}5A. Nf3 {176} 5a. Nc6 {178} 6A. Bb5 {176} 4b. Qe7 {175} 6a. Bb4 {177}7A. Qe2+ {176} 7a. Qe7 {176} 8A. Bxc6+ {175} 5B. Bg5 {172} 8a. bxc6 {175}5b. P@d6 {172} 9A. Qxe7+ {175} 9a. Bxe7 {174} 6B. e3 {170} 10A. Ne5 {173}10a. O-O {172} 6b. Nbd7 {167} 11A. Nxc6 {172} 11a. Re8 {171} 7B. P@c6 {164}7b. Nxe5 {164} 8B. dxe5 {163} 8b. bxc6 {163} 9B. exf6 {161} 9b. gxf6 {163}12A. Nxe7+ {157} 12a. Rxe7+ {170} 10B. Bxf6 {158} 13A. P@e5 {157}10b. Qxf6 {162} 11B. N@g4 {158} 13a. N@h4 {169} 14A. N@f4 {151} 11b. B@g7 {155}12B. Nxf6+ {153} 12b. Bxf6 {154} 14a. N@f3+ {161} 13B. B@d4 {149}15A. gxf3 {148} 15a. Nxf3+ {161} 16A. Kd1 {148} 13b. N@e5 {152} 14B. Bxe5 {148}14b. dxe5 {151} 15B. P@b5 {146} 15b. Bb4 {149} 16B. bxc6 {144} 16b. Bxc3+ {146}17B. bxc3 {144} 16a. Bf5 {146} 17b. N@c5 {142} 18B. Be2 {133} 17A. P@h6 {134}18b. e4 {140} 17a. Bxc2+ {144} 19B. Bh5 {131} 19b. Bxc3+ {137} 20B. Kf1 {129}20b. P@g6 {130} 21B. P@d7+ {125} 21b. Nxd7 {126} 22B. cxd7+ {124}22b. Bxd7 {125} 18A. Kxc2 {107} 18a. P@b3+ {140} 23B. Q@b7 {116} 23b. O-O {118}24B. Qxc7 {114} 24b. B@b5+ {114} 25B. Be2 {113} 25b. Bxa1 {110} 19A. Kxb3 {84}19a. Nxd4+ {138} 26B. Qxd7 {106} 20A. Ka3 {80} 26b. Bxd7 {108} 27B. Qxa1 {105}20a. N@c4+ {135} 21A. Kb4 {79} 27b. Bb5 {104} 21a. Q@a5+ {132}{LINDEGREN checkmated} 0-1'
 bpgn15='[Event "fics rated bughouse match"][Site "fics, Oklahoma City, OK USA"][Date "2001.03.03"][WhiteA "ChaseJr"][WhiteAElo "2186"][BlackA "LINDEGREN"][BlackAElo "2347"][WhiteB "Marat"][WhiteBElo "2190"][BlackB "Tecumseh"][BlackBElo "2176"][TimeControl "180+0"][Result "1-0"]1A. e4 {178} 1B. e4 {177} 1a. Nf6 {180} 2A. Nc3 {177} 2a. Nc6 {180}3A. d4 {177} 3a. d5 {179} 1b. Nc6 {175} 4A. exd5 {176} 2B. Nf3 {176}4a. Nxd5 {179} 5A. Bc4 {176} 2b. Nf6 {173} 5a. e6 {178} 3B. Nc3 {174}6A. Nf3 {175} 6a. Bb4 {178} 3b. e6 {171} 7A. Bd2 {173} 7a. Qe7 {177}4B. d4 {172} 4b. d5 {170} 8A. O-O {171} 8a. Bxc3 {177} 5B. Bg5 {171}9A. bxc3 {170} 5b. dxe4 {169} 6B. Bxf6 {170} 9a. f5 {176} 6b. gxf6 {168}7B. Nxe4 {170} 10A. Re1 {169} 7b. B@a5+ {167} 10a. P@e4 {174} 8B. P@c3 {168}11A. B@h4 {167} 8b. P@g7 {164} 9B. Bb5 {165} 11a. N@f6 {171} 9b. Bd7 {163}12A. Ne5 {165} 12a. Nxe5 {168} 13A. dxe5 {164} 10B. N@c5 {158} 13a. Rg8 {167}14A. Bxd5 {161} 14a. exd5 {166} 10b. f5 {157} 11B. Nxd7 {157} 15A. Bf4 {157}11b. fxe4 {154} 15a. B@g4 {163} 12B. Bxc6 {155} 12b. bxc6 {152} 13B. Nfe5 {154}16A. exf6 {152} 16a. gxf6 {162} 17A. Qxd5 {150} 13b. N@f4 {145} 14B. Rg1 {153}14b. P@e2 {142} 15B. Qd2 {151} 17a. Be6 {147} 15b. N@f3+ {130} 16B. gxf3 {148}18A. B@b5+ {140} 18a. Kf8 {129} 19A. Bh6+ {134} 16b. N@g2+ {93} 17B. Rxg2 {147}17b. Nxg2+ {92} 18B. Kxe2 {146} 18b. exf3+ {91} 19B. Kd1 {142} 19b. Ba3 {84}20B. B@g5 {137} 19a. P@g7 {83} 20b. Be7 {70} 21B. Bxe7 {134} 21b. Qxe7 {69}22B. N@f6+ {127} 20A. Bxg7+ {121} 22b. gxf6 {67} 20a. Rxg7 {80} 23B. P@g7 {125}21A. R@h8+ {121} 21a. N@g8 {78} 23b. Rg8 {64} 24B. B@f8 {124} 22A. N@d7+ {119}24b. P@e2+ {60} 25B. Kc1 {123} 22a. Bxd7 {71} 23A. Qxg8+ {117} 25b. Bxc3 {23}26B. Qxc3 {121} 26b. e1=Q+ {19} 27B. Qxe1 {120} 27b. Nxe1 {18} 28B. Bxe7 {119}28b. N@e2+ {15} 29B. Kd2 {118} 29b. Kxe7 {14} 30B. Nxc6+ {113} 23a. Rxg8 {18}24A. B@h6+ {116} 30b. Kxd7 {14} 31B. N@e5+ {110} 24a. P@g7 {15}25A. Rxg8+ {116} 31b. fxe5 {13} 32B. Nxe5+ {109} 32b. Kc8 {12} 25a. Kxg8 {14}26A. Q@g3 {115} 26a. N@f3+ {10} 27A. gxf3 {113} 33B. Q@d7+ {100} 27a. N@h3+ {8}33b. Kb7 {12} 28A. Kh1 {111} 28a. P@g2+ {8} 34B. R@b5+ {96} 34b. R@b6 {10}29A. Qxg2 {108} 35B. Qc6+ {94} 29a. Bxf3 {7} 30A. B@b3+ {107} 35b. Kc8 {9}36B. P@b7+ {93} 30a. P@e6 {6} 31A. Bxe6+ {105} 36b. Rxb7 {5} 31a. Bxe6 {4}32A. P@f7+ {104} 37B. Qxb7+ {91} 32a. Qxf7 {3} 33A. N@f4 {104} 37b. Kd8 {4}38B. Qxa8+ {90} 38b. Ke7 {3} 33a. Bxg2+ {1} 34A. Nxg2 {104} 39B. Qxg8 {89}34a. B@f3 {1} 35A. N@e7+ {103} 39b. N@c4+ {2} 35a. Qxe7 {1} 36A. N@f4 {103}40B. Nxc4 {87} 36a. Qf7 {1} 40b. P@e3+ {2} 41B. fxe3 {86} 41b. B@c3+ {1}37A. Bxf6 {100} 37a. Bxg2+ {1} 42B. bxc3 {84} 38A. Nxg2 {100}{LINDEGREN forfeits on time} 1-0'
 
-// -->
+choosegame('v1',0)
+assplay('v1')
 </script>
 
 </html>

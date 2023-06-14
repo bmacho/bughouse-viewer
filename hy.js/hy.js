@@ -53,7 +53,7 @@
 // 2001-04-21 v1.01 Fermy
 
 
-var viewerversion = '2021-05-06';
+var viewerversion = '2023-06-14';
 
 function log(...args) {
 	// if there is a debugInfo element, it logs there,
@@ -77,149 +77,6 @@ function saveNote(game_name_string) {
 	let game = eval(game_name_string)
 	let v = eval('window.document.' + game_name_string) // textarea doesnt have an id, it only has a name, so we must refer it with DOM objects 
 	game.BPGN[game.currentmove].cNote = v.comment.value// the textarea is called "comment"
-}
-
-
-var ClientLastMadeMove = "00X"; //here will be 10A , 5a, 17B etc.
-var BroadscastMove = false;
-this.eventedmousedown = false;
-
-
-function interfaceLogDebug(text) {
-	document.getElementById('clientdebug').innerHTML += text;
-}
-
-function interfaceOutMove(movefromHyViewer) {
-
-	//chatsendmove is somewhere in page outside viewer
-	document.getElementById('clientdebug').innerHTML += ' OutMyNewMove:' + movefromHyViewer + ',';
-	chatsendmove(movefromHyViewer);
-	ClientLastMadeMove = movefromHyViewer.substring(0, movefromHyViewer.indexOf('.'));
-
-}
-
-function interfaceInUpdateClock(viewer, timeaw, timeab, timebw, timebb) {
-	var v = eval(viewer);
-	v.a.wclock = Math.floor(timeaw / 1000);
-	v.a.bclock = Math.floor(timeab / 1000);
-	v.b.wclock = Math.floor(timebw / 1000);
-	v.b.bclock = Math.floor(timebb / 1000);
-
-	var formm = eval('window.document.' + viewer);
-	if (v.a.flip == 1) {
-		formm.upclocka.value = totime(v.a.wclock);
-		formm.dnclocka.value = totime(v.a.bclock);
-	} else {
-		formm.upclocka.value = totime(v.a.bclock);
-		formm.dnclocka.value = totime(v.a.wclock);
-	}
-
-	if (v.b.flip == 1) {
-		formm.upclockb.value = totime(v.b.wclock);
-		formm.dnclockb.value = totime(v.b.bclock);
-	} else {
-		formm.upclockb.value = totime(v.b.bclock);
-		formm.dnclockb.value = totime(v.b.wclock);
-	}
-
-	document.getElementById('clientdebug').innerHTML += ' TimesF:' + v.a.wclock + ',' + v.a.bclock + ',' + v.b.wclock + ',' + v.b.bclock + ' ';
-	//document.getElementById('clientdebug').innerHTML+='a.ExistsLegalMove(w):'+v.a.ExistsLegalMove('w'); //brx   
-}
-
-function interfaceInUpdateClockAdd(viewer, timeaw, timeab, timebw, timebb) {
-	var v = eval(viewer);
-	v.a.wclock -= timeaw;
-	v.a.bclock -= timeab;
-	v.b.wclock -= timebw;
-	v.b.bclock -= timebb;
-
-	var formm = eval('window.document.' + viewer);
-	if (v.a.flip == 1) {
-		formm.upclocka.value = totime(v.a.wclock);
-		formm.dnclocka.value = totime(v.a.bclock);
-	} else {
-		formm.upclocka.value = totime(v.a.bclock);
-		formm.dnclocka.value = totime(v.a.wclock);
-	}
-
-	if (v.b.flip == 1) {
-		formm.upclockb.value = totime(v.b.wclock);
-		formm.dnclockb.value = totime(v.b.bclock);
-	} else {
-		formm.upclockb.value = totime(v.b.bclock);
-		formm.dnclockb.value = totime(v.b.wclock);
-	}
-}
-
-
-function interfaceInUpdatePlayer(viewer, player, playernick) {
-	var v = eval(viewer);
-	if (player == 'A') v.whitea = playernick
-	else if (player == 'a') v.blacka = playernick
-	else if (player == 'B') v.whiteb = playernick
-	else if (player == 'b') v.blackb = playernick
-
-	var formm = eval('window.document.' + viewer);
-	if (v.a.flip == 1) {
-		formm.upa.value = v.whitea;
-		formm.dna.value = v.blacka;
-	} else {
-		formm.upa.value = v.blacka;
-		formm.dna.value = v.whitea;
-	}
-
-	if (v.b.flip == 1) {
-		formm.upb.value = v.whiteb;
-		formm.dnb.value = v.blackb;
-	} else {
-		formm.upb.value = v.blackb;
-		formm.dnb.value = v.whiteb;
-	}
-
-	document.getElementById('clientdebug').innerHTML += ' Players:' + v.whitea + ',' + v.blacka + ',' + v.whiteb + ',' + v.blackb + ' ';
-}
-
-function interfaceSetTC(viewer, time, delay) {
-	//document.getElementById('clientdebug').innerHTML+=' setTC,';
-}
-
-
-
-function interfaceInEndGame() {
-	//reset all
-	ClientLastMadeMove = "00X";
-
-	//unhighlight all squares
-	for (ind = 0; ind <= 63; ind++) {
-		sqHighlight('a', ind, false);
-		sqHighlight('b', ind, false);
-	}
-}
-
-
-
-function interfaceInMove(movetoHyViewer) {
-	var board;
-
-	if (ClientLastMadeMove == movetoHyViewer.substring(0, movetoHyViewer.indexOf('.'))) { // We already made move on our client board
-		document.getElementById('clientdebug').innerHTML += "InRefusedMove:" + movetoHyViewer + "[" + ClientLastMadeMove + ' vs ' + movetoHyViewer.substring(0, movetoHyViewer.indexOf('.')) + "]" + ",";
-		return;
-	}
-	document.getElementById('clientdebug').innerHTML += " InMove:" + movetoHyViewer + ',';
-
-	//if we dont ,lets make it, but not send to others 
-	//better should be done by parameters than switch global variables 
-	BroadscastMove = false;
-	if (movetoHyViewer.indexOf('.') >= 2) {
-		board = movetoHyViewer.substring(movetoHyViewer.indexOf('.') - 1, movetoHyViewer.indexOf('.')).toLowerCase();
-		assexecmove(movetoHyViewer, board, 'v1');
-	}
-	BroadscastMove = true;
-
-}
-
-function interfacePtell(txtmsg) {
-	socket.emit('sendchat', txtmsg);
 }
 
 
@@ -4189,20 +4046,6 @@ function execmove(bd, text) {
 	} else {
 		tmp1 = (mv.board == 'a' && this.a.flip == 0) ||
 			(mv.board == 'b' && this.b.flip == 0);
-
-		//try
-		//{
-
-		// }
-		// catch(err) 
-		// { interfaceLogDebug(err.message);
-		// }       
-
-
-		if (BroadscastMove)
-			interfaceOutMove(nMove + tobpgn(mv));
-		else
-			var brx = 'nic';
 
 		if (tbd.incheck('w', tbd.kingw)) {
 			document.getElementById('clientdebug').innerHTML += " IsCheck";
