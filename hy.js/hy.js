@@ -3873,6 +3873,7 @@ function assforward(num, bd, viewer, opt) {
 		if (v.BPGN[v.currentmove].nNext.length < opt + 1) {
 			v.refreshinfo();
 			v.refreshhighlight()
+			v.refreshclock();
 			return;
 		};
 
