@@ -1,3 +1,4 @@
+
 <!--
 // Javascript bughouse viewer v 1.01 (C) Sergiy Vasylkevych aka Fermy on FICS
 // Feel free to use/copy/modify/distribute
@@ -112,49 +113,74 @@ function main (game_id) {
 
 	$.when( getgameA, getgameBl, getgameBu ).done( function( json_replyA, json_replyBl, json_replyBu ) {
 		
-		
-		gameA = json_replyA[0]
 
-		var BU = json_replyBu[0]
-		var BL = json_replyBl[0]
-
-		var Bu_isbh = (BU.game == undefined) ? false : BU.game.type == "bughouse" 
-		var Bl_isbh = (BL.game == undefined) ? false : BL.game.type == "bughouse"
-
-		if ( Bu_isbh && !Bl_isbh ) {
-			console.log( " lower game not bughouse, but upper game is bughouse, choose that " )
-			gameB = BU
-		} else if ( !Bu_isbh && Bl_isbh ) {
-			console.log( " upper game not bughouse, but lower game is bughouse, choose that " )
-			gameB = BL
-		} else if ( Bu_isbh && Bl_isbh ) {
-			// both of the nearby games are bughouse
-			// TODO: inform the user
-			// provide a sane default
-			// provide a way to choose the other game
+		if (json_replyA[0] && json_replyA[0].game && json_replyA[0].game.partnerGameId) {
+			// there is partner id provided
+			console.log( "partner game id is provided") 
+			partnerid = parseInt( json_replyA[0].game.partnerGameId )
 			
-			// currently we choose the game with the lower id 
-			// so if that's not the corresponding game, increment the id 2 or 1
+			if ( partnerid == BLid ) {
+				setUpGameFromJSONReplies( json_replyA, json_replyBl )
+			} else if ( partnerid == BUid ) {
+				setUpGameFromJSONReplies( json_replyA, json_replyBu )
+			} else {
+				console.log( "partner game is not at +- 1/2")
+				var getgameBB = $.getJSON( proxyurl + partnerid )
+				$.when( getgameA, getgameBB ).done( setUpGameFromJSONReplies )
+			} 
 			
-			gameB = BL
-
-			console.log( "both of the nearby games are bughouse, we chose the one with the lower id. If thats not the corresponding game, try to open ", BUid    )
 		} else {
-			console.log( "couldn't find the game for the B board" )
+			console.log( "partner game id is not provided, try the nearby games if those are the partners") 
+
+			var BU = json_replyBu[0]
+			var BL = json_replyBl[0]
+
+			var Bu_isbh = (BU.game == undefined) ? false : BU.game.type == "bughouse" 
+			var Bl_isbh = (BL.game == undefined) ? false : BL.game.type == "bughouse"
+
+			if ( Bu_isbh && !Bl_isbh ) {
+				console.log( " lower game not bughouse, but upper game is bughouse, choose that " )
+				json_replyB = json_replyBu
+			} else if ( !Bu_isbh && Bl_isbh ) {
+				console.log( " upper game not bughouse, but lower game is bughouse, choose that " )
+				json_replyB = json_replyBl
+			} else if ( Bu_isbh && Bl_isbh ) {
+				// both of the nearby games are bughouse
+				// TODO: inform the user
+				// provide a sane default
+				// provide a way to choose the other game
+				
+				// currently we choose the game with the lower id 
+				// so if that's not the corresponding game, increment the id 2 or 1
+				
+				json_replyB = json_replyBl
+
+				console.log( "both of the nearby games are bughouse, we chose the one with the lower id. If thats not the corresponding game, try to open ", BUid    )
+			} else {
+				console.log( "couldn't find the game for the B board" )
+			}
+			
+			setUpGameFromJSONReplies ( json_replyA, json_replyB )
 		}
-		
-		movesA = parseMoveList(gameA.game.moveList)
-		movesB = parseMoveList(gameB.game.moveList)
 
-		var bpgn1
+	})
+}
 
-		bpgn1 = bpgn(gameA, gameB, movesA, movesB)
-		
-		console.log(bpgn1)
+function setUpGameFromJSONReplies ( json_replyA, json_replyB ) {
+	gameA = json_replyA[0]
+	gameB = json_replyB[0]
+	movesA = parseMoveList(gameA.game.moveList)
+	movesB = parseMoveList(gameB.game.moveList)
+	
+	var bpgn1
 
-		v1.reloadgame(bpgn1, "", "")
-		assforward(999,'c','v1',0)
-	});
+	bpgn1 = bpgn(gameA, gameB, movesA, movesB)
+	
+	console.log(bpgn1)
+
+	v1.reloadgame(bpgn1, "", "")
+	assforward(999,'c','v1',0)	
+	
 }
 
 if ( searchParams.has('game_id') ) {
@@ -249,13 +275,10 @@ if ( searchParams.has('game_id') ) {
 					'>[BHV]</a> and <a href="https://github.com/bmacho/bughouse-viewer/raw/main/BHV-links.user.js">[userscript]</a>!
 			<h2>What's new:</h2>
 			<ul>
+				<li>2023.07.09: chess.com provides the id of partner games again, every game should work again. If something is not working please file an issue on github (on a side note, I've kept the code that downloads both of the nearby games, so it should be one roundtrip faster, on the cost of making 1.5x times the requests to chess.com)</li>
 				<li>2023.06.02: coordinates added (code from onlinea.eu, originally by Wir)</li>
 				<li>userscript fixed, improved, should redirect bughouse links from archive pages and member pages, also auto updates again ( code now updates and runs on other peoples computer, so much hassle to change it ) </li>
 				<li>bookmarklet fixed</li>
-				<li>from May 21, 2023, chess.com doesn't provide the id of the other board. If your game is not loading, it may be due to that. 
-				I implemented some heuristics, but it doesn't work every case. 
-					<br> It checks the games with nearby ids if they are bughouse, and choose the bughouse one for the partner board. 
-					If both are bughouses this approach is not working. It chooses the game with the lower id for board B, if that's the wrong game, increment your id 2 (or 1, if the game is older than 2021.02.18).</li>
 				<li>the bookmarklet and the userscript now recognise flips</li>
 				<li><s>the userscript does NOT auto update from now, so please update it manually</s></li>
 				<li>code grabbed from onlinea.eu (SKA_cz and Wir) :
