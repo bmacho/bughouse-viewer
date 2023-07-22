@@ -3033,6 +3033,9 @@ function tobpgn(mv) {
 }
 
 function mdown(ind, bd) {
+	// mown gets running, when mouse is pressed down on a square
+	// if it was pressed down on an enemy square or a clear square, when you release your mouse button, mdown runs again 
+	// if it was pressed down on your own square, then when you release it, mouseup will run
 	var src;
 	if (this.displaymode == 'diagram') {
 		return;
@@ -3067,6 +3070,10 @@ function mdown(ind, bd) {
 }
 
 function mup(ind, bd) {
+	// mdown gets running, when mouse is pressed down on a square
+	// if it was pressed down on an enemy square or a clear square, when you release your mouse button, mdown runs again 
+	// if it was pressed down on your own square, then when you release it, mouseup will run
+
 	if (this.displaymode == 'diagram') {
 		return;
 	};
