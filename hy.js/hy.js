@@ -4005,10 +4005,35 @@ function execmove(bd, text) {
 	*/
 	
 	saveNote(this.viewername) // for some reason the comment textarea onchange doesn't call when we move a piece by hand, so we call savenote here
-	
+		
+	var v = v1
 	var move = extractmove(text);
+	
 	var tbd = eval('this.' + bd);
 	var mv = this.decryptmove(tbd, move);
+	
+	// check if there is already such a move, and do that instead, if there is already
+
+	isThereSuchAMoveAlready : {
+		
+		let nextMoveIndices = v.BPGN[v.currentmove].nNext ;
+		
+		let isSameMove = (a,b) => { return a.board == b.board && a.fromsquare == b.fromsquare && a.tosquare == b.tosquare }
+		
+		let isSuchAMove = false ; 
+		
+		for ( const moveInd of nextMoveIndices ) {
+			if ( isSameMove(mv, v.BPGN[ moveInd ].dmove) ) {
+				v.forwardmove( moveInd ) ;
+				v.refreshclock();
+				v.refreshinfo();
+				v.refreshhighlight()
+				return ; 
+			} 
+		}
+				 
+	};
+
 	var res, lid, lobj, tmp1, ltmp;
 	if (mv == false || mv.fromsquare == -1) return;
 	/* special cases */
