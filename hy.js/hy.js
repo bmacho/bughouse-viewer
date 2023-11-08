@@ -4026,9 +4026,7 @@ function execmove(bd, text) {
 		let nextMoveIndices = v.BPGN[v.currentmove].nNext ;
 		
 		let isSameMove = (a,b) => { return a.board == b.board && a.fromsquare == b.fromsquare && a.tosquare == b.tosquare && a.frompiece == b.frompiece }
-		
-		let isSuchAMove = false ; 
-		
+				
 		for ( const moveInd of nextMoveIndices ) {
 			if ( isSameMove(mv, v.BPGN[ moveInd ].dmove) ) {
 				v.forwardmove( moveInd ) ;
