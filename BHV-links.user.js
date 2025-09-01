@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         BHV links for chess.com
-// @version      2025.09.01
+// @version      2025.09.01.01
 // @description  puts a BHV button into the left menubar, replaces archive game links to BHV links
 // @author       bmacho
 
@@ -130,12 +130,18 @@ Change links`)
     let modifyRow = (row, pType) => {
         if (shouldReplaceRow(row,pType)) {
             if (pType == PageType.archive) {
-                row.innerHTML = row.innerHTML
-                    .replaceAll("https://www.chess.com/game/live/", "https://bmacho.github.io/bughouse-viewer/view.html?game_id=")
-                    .replaceAll("https://www.chess.com/analysis/game/live/", "https://bmacho.github.io/bughouse-viewer/view.html?game_id=")
+                // archive page
+                let links = row.getElementsByTagName("a")
+                for (let a of links) {
+                    if (!a.href.startsWith("https://www.chess.com/member/"))
+                    a.href = "https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + a.href.slice(32);
+                }
             } else {
                 // pageType is profile or games
-                row.innerHTML = row.innerHTML.replaceAll("/game/live/", "https://bmacho.github.io/bughouse-viewer/view.html?game_id=")
+                let links = row.getElementsByTagName("a")
+                for (let a of links) {
+                    a.href = "https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + a.href.slice(32);
+                }
             }
         }
     }
