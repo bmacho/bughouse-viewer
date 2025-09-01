@@ -14,28 +14,14 @@
 // @namespace    none
 // @updateURL    https://github.com/bmacho/bughouse-viewer/raw/main/BHV-links.user.js
 // @run-at       document-idle
-// @grant        GM_setValue
-// @grant        GM_getValue
-// @grant        GM_registerMenuCommand
+// @grant        none
 
 // ==/UserScript==
 
 // ============ Settings ============ //
 
-window.replace_archive = GM_getValue("replace_archive", true)
+window.replace_archive = true
 window.put_BHV_button  = true
-
-if (replace_archive) {
-    GM_registerMenuCommand("Disable replace games (reload)", () => {
-        GM_setValue("replace_archive", false) ;
-        location.reload() ;
-    });
-} else {
-    GM_registerMenuCommand("Enable replace games (reload)", () => {
-        GM_setValue("replace_archive", true) ;
-        location.reload() ;
-    });
-}
 
 
 // ======== Handle page type ========= //
