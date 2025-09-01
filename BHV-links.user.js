@@ -1,37 +1,80 @@
 // ==UserScript==
 // @name         BHV links for chess.com
-// @version      2023.06.02
+// @version      2025.09.01
 // @description  puts a BHV button into the left menubar, replaces archive game links to BHV links
 // @author       bmacho
 
 // @match        https://www.chess.com/game/live/*
 // @match        https://www.chess.com/games/archive*
 // @match        https://www.chess.com/member/*
-// @match        https://www.chess.com/play/online*
+// @match        https://www.chess.com/play*
 
 // @icon         data:image/gif;base64,R0lGODlhEAAQAPIAAAAAAE13N2CQPG6fQpK7SAAAAAAAAAAAACH5BAUKAAAALAAAAAAQABAAAAM1CLrTsxAKQlqI0VksnbgcM3yhaIGcoH1oGrylSMZAM5fO22a5zmkDHSwiUBWFO6SQFVEKFwkAOw==
 
 // @namespace    none
-// @grant        none
 // @updateURL    https://github.com/bmacho/bughouse-viewer/raw/main/BHV-links.user.js
 // @run-at       document-idle
+// @grant        GM_setValue
+// @grant        GM_getValue
+// @grant        GM_registerMenuCommand
+
 // ==/UserScript==
 
-let replace_archive = true
-let put_BHV_button  = true
+// ============ Settings ============ //
 
-let is_member    = location.pathname.slice(0, 8)  == "/member/"
-let is_archive   = location.pathname.slice(0, 15) == "/games/archive/"
+window.replace_archive = GM_getValue("replace_archive", true)
+window.put_BHV_button  = true
 
-let is_livegame   = location.pathname.slice(0, 11) == "/game/live/"
-let is_play_onl   = location.pathname.slice(0, 12) == "/play/online"
+if (replace_archive) {
+    GM_registerMenuCommand("Disable replace games (reload)", () => {
+        GM_setValue("replace_archive", false) ;
+        location.reload() ;
+    });
+} else {
+    GM_registerMenuCommand("Enable replace games (reload)", () => {
+        GM_setValue("replace_archive", true) ;
+        location.reload() ;
+    });
+}
 
 
+// ======== Handle page type ========= //
+
+window.PageType = {
+    profile : "profile" ,      //  https://chess.com/member/bmacho
+    games   : "games" ,        //  https://chess.com/member/bmacho/games
+    play    : "play" ,         //  https://www.chess.com/play/online/doubles-bughouse
+    // ^ put BHV button there before seeking games
+    game    : "game" ,         //  https://www.chess.com/game/live/72363735187
+    // ^ the page of a single game
+    archive : "archive" ,      //  https://www.chess.com/games/archive/bmacho
+    // ^ legacy, possible chess.com will remove them soon
+}
+
+window.pageType = (() => {
+   // recognize which page are we on
+   let path  = location.pathname                    // e.g. "/game/live"
+   let paths = location.pathname.split('/')         // e.g. ['', 'game', 'live']
+
+   if (path.slice(0, 11) == "/game/live/" )         return PageType.game    ;
+   if (path.slice(0,  5) == "/play")                return PageType.play  ;
+   if (path.slice(0, 14) == "/games/archive")       return PageType.archive ;
+   if (paths[1] == "member" && !paths[3])           return PageType.profile ;
+   if (paths[1] == "member" && paths[3] == "games") return PageType.games ;
+})()
+
+console.info(`BHV userscript:\n\n
+PageType is ${pageType}`)
 
 
-if ( put_BHV_button && ( is_livegame || is_play_onl ) ) {
+// ========= Put BHV button ========== //
 
-    console.log( "live game or an archive" )
+
+if ( put_BHV_button && ( pageType == PageType.play || pageType == PageType.game ) ) {
+
+    console.info(`BHV userscript:\n\n
+Put the BHV button`)
+
 
     // waits until the menu appears, then calls add_button()
     var sidebar_upper;
@@ -46,65 +89,6 @@ if ( put_BHV_button && ( is_livegame || is_play_onl ) ) {
 
     })();
 
-} 
-
-if ( replace_archive && (is_archive || is_member ) ) {
-
-    // waits until the table loads
-    var tbody;
-    (function wait(){
-
-        let tbody = document.getElementsByTagName("tbody")[0]
-        if ( tbody ) {
-
-            // for debug purposes
-            console.log(tbody)
-            window.tb = tbody
-
-
-            if (is_member) {
-                for (let ch of tbody.children) {
-                    replaceArchive_Member(ch)
-                }
-            }
-
-            if (is_archive) {
-                for (let ch of tbody.children) {
-                    replaceArchive_Archive(ch)
-                }
-            }
-        } else {
-            setTimeout(wait, 50);
-        }
-
-    })();
-
-}
-
-
-
-
-function replaceArchive_Archive ( row ) {
-// call it on the '.children' of the 'tbody' of the table that contains links to archive games
-// on a /games/archive page
-
-    let isbughouse = row.innerHTML.includes(' bughouse"') // it is a row that points to a bughouse game
-    if ( isbughouse ) {
-        row.innerHTML = row.innerHTML
-            .replaceAll("https://www.chess.com/game/live/", "https://bmacho.github.io/bughouse-viewer/view.html?game_id=")
-            .replaceAll("https://www.chess.com/analysis/game/live/", "https://bmacho.github.io/bughouse-viewer/view.html?game_id=")
-    }
-}
-
-function replaceArchive_Member ( row ) {
-// call it on the '.children' of the 'tbody' of the table that contains links to archive games
-// on a /member page
-
-    let isbughouse = row.innerHTML.includes(' bughouse"') // it is a row that points to a bughouse game
-    if ( isbughouse ) {
-        row.innerHTML = row.innerHTML
-            .replaceAll("/game/live/", "https://bmacho.github.io/bughouse-viewer/view.html?game_id=")
-    }
 }
 
 function add_button( sidebar_upper ) {
@@ -133,5 +117,56 @@ function openBHV() {
     let flip = board_obj ? board_obj.classList.contains("flipped") ? "&flip=true" : "" : "" ;
 
     window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip, "_blank") ;
+
+}
+
+
+
+
+// ========= Modify game links ========== //
+
+
+if ( replace_archive && ( pageType == PageType.profile || pageType == PageType.games || pageType == PageType.archive ) ) {
+    console.info(`BHV userscript:\n\n
+Change links`)
+
+
+    window.getTbody = (pType) => {
+        // gets tbody according to page type (currently both 3 page type works the same way)
+        // returns undefined if tbody is not found ( might be constructed later )
+        return document.getElementsByTagName("tbody")[0]
+    }
+
+    let isRowBughouse = (row, pType) => {
+        return row.innerHTML.includes('-bughouse"')
+    }
+
+    let modifyRow = (row, pType) => {
+        if (isRowBughouse(row,pType)) {
+            if (pType == PageType.archive) {
+                row.innerHTML = row.innerHTML
+                    .replaceAll("https://www.chess.com/game/live/", "https://bmacho.github.io/bughouse-viewer/view.html?game_id=")
+                    .replaceAll("https://www.chess.com/analysis/game/live/", "https://bmacho.github.io/bughouse-viewer/view.html?game_id=")
+            } else {
+                // pageType is profile or games
+                row.innerHTML = row.innerHTML.replaceAll("/game/live/", "https://bmacho.github.io/bughouse-viewer/view.html?game_id=")
+            }
+        }
+    }
+
+    var replaceTbody = (pType) => {
+        // looks for a table full of rows for games
+        // if there isn't one, returns
+        // if there is one, replaces bughouse games with BHV links
+        // is called in every 0.2 seconds
+        window.tb = getTbody(pType)
+        if (!tb) return ;
+
+        for (let row of tb.children) {
+            modifyRow(row, pType)
+        }
+    }
+
+    setInterval( replaceTbody , 200, pageType );
 
 }
