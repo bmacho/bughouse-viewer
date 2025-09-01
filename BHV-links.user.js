@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         BHV links for chess.com
-// @version      2025.09.01.01
+// @version      2025.09.01.02
 // @description  puts a BHV button into the left menubar, replaces archive game links to BHV links
 // @author       bmacho
 
@@ -159,6 +159,6 @@ Change links`)
         }
     }
 
-    setInterval( replaceTbody , 200, pageType );
+    setInterval( replaceTbody , 100, pageType );
 
 }
