@@ -137,12 +137,12 @@ Change links`)
         return document.getElementsByTagName("tbody")[0]
     }
 
-    let isRowBughouse = (row, pType) => {
-        return row.innerHTML.includes('-bughouse"')
+    let shouldReplaceRow = (row, pType) => {
+        return row.innerHTML.includes('-bughouse"') && !row.innerHTML.includes('https://bmacho.github.io/bughouse-viewer/')
     }
 
     let modifyRow = (row, pType) => {
-        if (isRowBughouse(row,pType)) {
+        if (shouldReplaceRow(row,pType)) {
             if (pType == PageType.archive) {
                 row.innerHTML = row.innerHTML
                     .replaceAll("https://www.chess.com/game/live/", "https://bmacho.github.io/bughouse-viewer/view.html?game_id=")
