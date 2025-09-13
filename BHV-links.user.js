@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         BHV links for chess.com
-// @version      2025.09.01.02
+// @version      2025.09.13
 // @description  puts a BHV button into the left menubar, replaces archive game links to BHV links
 // @author       bmacho
 
@@ -118,9 +118,25 @@ Change links`)
 
 
     window.getTbody = (pType) => {
-        // gets tbody according to page type (currently both 3 page type works the same way)
+        // gets tbody according to page type
         // returns undefined if tbody is not found ( might be constructed later )
-        return document.getElementsByTagName("tbody")[0]
+        switch (pType) {
+            case PageType.profile:
+                // some profile pages have a daily games table above the game list
+                // and some don't
+                if (document.getElementsByTagName("tbody")[0]?.className == 'games-list-list-table-body') {
+                    return document.getElementsByTagName("tbody")[1]
+                } else {
+                    return document.getElementsByTagName("tbody")[0]
+                }
+                break;
+
+            default:
+                // for other page types game table is always the first
+                return document.getElementsByTagName("tbody")[0]
+        }
+
+
     }
 
     let shouldReplaceRow = (row, pType) => {
