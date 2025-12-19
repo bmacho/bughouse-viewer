@@ -3905,6 +3905,56 @@ function assforward(num, bd, viewer, opt) {
 	v.refreshhighlight()
 }
 
+function assbefore(movestr, viewer) {
+	// Jumps before a move
+    // Handles formats like "14a", "14A", "14.a", "14.A", "14.A Nf2"
+    // Needs to be called after the game tree is built up or traversed, e.g. after assforward(999)
+    // Written by claude.ai 
+    
+    var v = eval(viewer);
+    
+    // Parse the move string to extract move number and board
+    // Handle formats like "14a", "14A", "14.a", "14.A", "14.A Nf2"
+    movestr = movestr.replace(/\s+.*$/, '').replace(/\./g, '').trim();
+    
+    // Extract move number and board character
+    var match = movestr.match(/(\d+)([aAbB])/);
+    if (!match) {
+        return; // Invalid format
+    }
+    
+    var targetMoveNum = parseInt(match[1]);
+    var targetBoard = match[2];
+    
+    // Go back to root
+    while (v.currentmove != BPGN_ROOT) {
+        v.undomove();
+    }
+    
+    // Traverse forward through main line until we reach just before the target move
+    var currentIndex = BPGN_ROOT;
+    
+    while (v.BPGN[currentIndex].nNext.length > 0) {
+        var nextIndex = v.BPGN[currentIndex].nNext[0]; // Always follow main line (index 0)
+        var nextNode = v.BPGN[nextIndex];
+        
+        // Check if the next move is our target
+        if (nextNode.nMove == targetMoveNum && nextNode.cBoard == targetBoard) {
+            // We've reached the position before the target move - stop here
+            break;
+        }
+        
+        // Execute the next move and continue
+        v.forwardmove(nextIndex);
+        currentIndex = nextIndex;
+    }
+    
+    // Refresh display
+    v.refreshclock();
+    v.refreshinfo();
+    v.refreshhighlight();
+}
+
 function assundomove(num, bd, viewer) {
 	var f = 0;
 	var t;
