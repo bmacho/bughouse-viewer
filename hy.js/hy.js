@@ -4833,7 +4833,7 @@ function drawinfo(color) {
 	t = t + '</tr>';
 	t = t + '<tr>';
 	t = t + '<td valign="top">';
-	t += '<select name="nextmove"  size="5" onChange="assforward(1,' + "'c','" + this.viewername + "'" + ',document.' + this.viewername + '.nextmove.selectedIndex);" >';
+	t += '<select name="nextmove"  size="5" onClick="assforward(1,' + "'c','" + this.viewername + "'" + ',document.' + this.viewername + '.nextmove.selectedIndex);" >';
 	for (i = 0; i < MAX_NEXT; i++) opt = opt + '<option>';
 	t = t + '<option>' + ph + opt;
 	t = t + '</select></td>';
