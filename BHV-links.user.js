@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         BHV links for chess.com
-// @version      2025.09.13
+// @version      2026.01.30
 // @description  puts a BHV button into the left menubar, replaces archive game links to BHV links
 // @author       bmacho
 
@@ -62,13 +62,13 @@ if ( put_BHV_button && ( pageType == PageType.play || pageType == PageType.game 
 Put the BHV button`)
 
 
-    // waits until the menu appears, then calls add_button()
+    // waits until the sidebar has been loaded, then add_BHV_button_after() on the HR element
     var sidebar_upper;
     (function wait(){
 
-        let sidebar_upper = document.getElementById("sb").children[2];
+        let sidebar_upper = document.getElementById("sidebar-main-menu").children[2]; // wait 
         if ( sidebar_upper ) {
-            add_button( sidebar_upper )
+            add_BHV_button_after( document.getElementById("sidebar-main-menu").querySelector('hr') )  // add BHV button 
         } else {
             setTimeout(wait, 100);
         }
@@ -77,7 +77,7 @@ Put the BHV button`)
 
 }
 
-function add_button( sidebar_upper ) {
+function add_BHV_button_after( hr_element ) {
 
     var review_button = document.createElement("div");
 
@@ -90,7 +90,7 @@ function add_button( sidebar_upper ) {
     review_button.addEventListener ("click", openBHV)
     review_button.addEventListener ("auxclick", openBHV)
 
-    sidebar_upper.appendChild(review_button)
+    hr_element.insertAdjacentElement('afterend',review_button)
 
 }
 
