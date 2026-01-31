@@ -3936,6 +3936,104 @@ function analysis(viewer) {
 }
 
 
+function searchformove( movestr, v ) {
+	// Searches for a move in the game tree
+    // Handles formats like "14a", "14A", "14.a", "14.A", "14.A Nf2"
+	// Only traverses in the main line 
+	// Needs to be called after the game tree is built up or traversed, e.g. after assforward(999)
+	// Returns -1 if not found, or BPGN index if the move is found
+	
+    // Extract move number and board character
+    let match = movestr.match(/(\d+)([aAbB])/);
+    if (!match) {
+        return -1; // Invalid format
+    }
+    
+    let targetMoveNum = parseInt(match[1]);
+    let targetBoard = match[2];
+    let BPGN = v.BPGN
+    
+	let ind = 0
+	let d = BPGN[ind]
+	
+
+	while ( true ) {
+		
+		if (d?.nMove == targetMoveNum && d?.cBoard == targetBoard) { 
+			return ind
+		} else if ( d?.nNext ) {
+			ind = d.nNext[0] //nNext[0] is the main line
+			d = BPGN[ind]
+		} else {
+			return -1 
+		}
+	}
+	
+}
+
+function assbeginning ( v ) {
+	// Moves v to the beginning 
+
+	while ( v.currentmove != BPGN_ROOT ) {
+		v.undomove()
+	}
+
+	v.refreshclock();
+	v.refreshinfo();
+	v.refreshhighlight();
+}
+
+function asstomove ( movestr, v ) {
+	// Jumps to a move
+    // Handles formats like "14a", "14A", "14.a", "14.A", "14.A Nf2"
+    // Only traverses in the main line 
+    // Needs to be called after the game tree is built up or traversed, e.g. after assforward(999)
+
+    // Extract move number and board character
+
+	let movind = searchformove( movestr, v )
+
+	if ( movind != -1 ) {
+
+		// jump to the beginning
+		assbeginning ( v )
+	
+		// 
+		let ind = 1
+		while ( ind <=  movind ) {
+			v.forwardmove(ind)
+			ind++
+		}
+
+		v.refreshclock();
+		v.refreshinfo();
+		v.refreshhighlight()
+	}
+}
+
+function refreshURLBox() {
+	// sets the value of URLBox
+	
+	const URLBox = document.getElementById('URLBox');
+	
+	const URL = location.href;
+	
+	URLBox.value = location.href;
+	
+}
+
+
+function copyURLWithMove() {
+	// copies and 
+	const input = document.querySelector('input[readonly]');
+	input.select();
+	document.execCommand('copy');
+	
+	const copied = document.getElementById('copied');
+	copied.style.transition = 'opacity 0.3s';
+	copied.style.opacity = '1';
+	setTimeout(() => copied.style.opacity = '0', 2000);
+}
 
 function assexecmove(text, bd, viewer) {
 	var v = eval(viewer);
