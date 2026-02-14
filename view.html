@@ -117,16 +117,23 @@ function main (game_id) {
 		if (json_replyA[0] && json_replyA[0].game && json_replyA[0].game.partnerGameId) {
 			// there is partner id provided
 			console.log( "partner game id is provided") 
-			partnerid = parseInt( json_replyA[0].game.partnerGameId )
+			partnerid = json_replyA[0].game.partnerGameId 
+			 
+			BL = json_replyBl[0]
+			BU = json_replyBu[0]
 			
-			if ( partnerid == BLid ) {
+			if ( BL && BL.game && BL.game.uuid == partnerid ) {
 				setUpGameFromJSONReplies( json_replyA, json_replyBl )
-			} else if ( partnerid == BUid ) {
+			} else if ( BU && BU.game && BU.game.uuid == partnerid ) {
 				setUpGameFromJSONReplies( json_replyA, json_replyBu )
 			} else {
-				console.log( "partner game is not at +- 1/2")
-				var getgameBB = $.getJSON( proxyurl + partnerid )
-				$.when( getgameA, getgameBB ).done( setUpGameFromJSONReplies )
+				// finding game by game uuid is not working yet
+				// need to fix the proxy at cloudflare
+				//
+				// console.log( "partner game is not at +- 1/2")
+				// var getgameBB = $.getJSON( proxyurl + partnerid )
+				// $.when( getgameA, getgameBB ).done( setUpGameFromJSONReplies )
+				
 			} 
 			
 		} else {
