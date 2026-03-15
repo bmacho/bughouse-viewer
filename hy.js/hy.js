@@ -2677,7 +2677,8 @@ function assdelete(viewer) {
 	if (v.currentmove == BPGN_ROOT) return;
 	v.BPGN_DeleteCurrentMove(v.currentmove);
 	v.undomove();
-	v.refreshhighlight()
+	v.refreshhighlight();
+	v.refreshURLBox();
 }
 
 function BPGN_DeleteCurrentMove(nCurrent) {
@@ -3879,7 +3880,8 @@ function assforward(num, bd, viewer, opt) {
 	while (f < num) {
 		if (v.BPGN[v.currentmove].nNext.length < opt + 1) {
 			v.refreshinfo();
-			v.refreshhighlight()
+			v.refreshhighlight();
+			v.refreshURLBox();
 			v.refreshclock();
 			return;
 		};
@@ -3902,7 +3904,8 @@ function assforward(num, bd, viewer, opt) {
 	};
 	v.refreshclock();
 	v.refreshinfo();
-	v.refreshhighlight()
+	v.refreshhighlight();
+	v.refreshURLBox();
 }
 
 function assundomove(num, bd, viewer) {
@@ -3918,7 +3921,8 @@ function assundomove(num, bd, viewer) {
 	var v = eval(viewer);
 	while (f < num) {
 		if (v.currentmove == BPGN_ROOT) {
-			v.refreshhighlight()
+			v.refreshhighlight();
+			v.refreshURLBox();
 			return;
 		}
 		
@@ -3928,7 +3932,8 @@ function assundomove(num, bd, viewer) {
 		};
 		v.undomove();
 	};
-	v.refreshhighlight()
+	v.refreshhighlight();
+	v.refreshURLBox();
 }
 
 function analysis(viewer) {
@@ -3981,7 +3986,10 @@ function assbeginning ( v ) {
 	v.refreshclock();
 	v.refreshinfo();
 	v.refreshhighlight();
+	v.refreshURLBox();
 }
+
+
 
 function asstomove ( movestr, v ) {
 	// Jumps to a move
@@ -4007,12 +4015,23 @@ function asstomove ( movestr, v ) {
 
 		v.refreshclock();
 		v.refreshinfo();
-		v.refreshhighlight()
+		v.refreshhighlight();
+		v.refreshURLBox();
 	}
 }
 
-function refreshURLBox() {
+function setParam(urlString, key, value) {
+	// urlString -> urlString function
+	// sets search parameter
+	// modifies existing, or adds new
+	const url = new URL(urlString);
+	url.searchParams.set(key, value);
+	return url.toString();
+}
+
+function refreshURLBox( ) {
 	// sets the value of URLBox
+	const v = eval ("v1")
 	
 	const URLBox = document.getElementById('URLBox');
 	
@@ -4020,25 +4039,39 @@ function refreshURLBox() {
 	
 	URLBox.value = location.href;
 	
+	const cMove = v.BPGN[v.currentmove].cMove 
+	
+	const moveMatcher = /^\d{1,4}[aAbB]/;	// use: s.match(moveMatcher)[0]
+	
+	if (cMove.match(moveMatcher)) {
+		URLBox.value = setParam( URLBox.value, "move", cMove.match(moveMatcher)[0] );
+	}
 }
 
 
 function copyURLWithMove() {
-	// copies and 
-	const input = document.querySelector('input[readonly]');
-	input.select();
+	
+	// puts the content of the URLbox on the clipboard
+	// shows the "Copied!" message
+	
+	refreshURLBox()
+	
+	const URLBox = document.getElementById( "URLBox" );
+	URLBox.select();
 	document.execCommand('copy');
 	
 	const copied = document.getElementById('copied');
 	copied.style.transition = 'opacity 0.3s';
 	copied.style.opacity = '1';
-	setTimeout(() => copied.style.opacity = '0', 2000);
+	setTimeout(() => copied.style.opacity = '0', 1000);
 }
+
 
 function assexecmove(text, bd, viewer) {
 	var v = eval(viewer);
 	v.execmove(bd, text);
-	v.refreshhighlight()
+	v.refreshhighlight();
+	v.refreshURLBox();
 }
 
 function forwardmove(ind) {
@@ -4130,7 +4163,8 @@ function execmove(bd, text) {
 				v.forwardmove( moveInd ) ;
 				v.refreshclock();
 				v.refreshinfo();
-				v.refreshhighlight()
+				v.refreshhighlight();
+				v.refreshURLBox();
 				return ; 
 			} 
 		}
@@ -4164,7 +4198,8 @@ function execmove(bd, text) {
 	}
 	this.refreshclock();
 	this.refreshinfo();
-	this.refreshhighlight()
+	this.refreshhighlight();
+	this.refreshURLBox();
 }
 
 
@@ -4686,7 +4721,8 @@ function reloadgame(bpgntext, bfena, bfenb) {
 		this.b.brefreshform();
 	};
 	this.refreshinfo();
-	this.refreshhighlight()
+	this.refreshhighlight();
+	this.refreshURLBox();
 }
 
 
@@ -4772,7 +4808,8 @@ function assloadgame(viewer) {
 	};
 	v.reloadwindow.document.writeln(generateloadhtml(viewer));
 	v.reloadwindow.focus();
-	v.refreshhighlight()
+	v.refreshhighlight();
+	v.refreshURLBox();
 
 }
 
@@ -4914,8 +4951,18 @@ function drawcontrol(color, mode) {
 		t += '<input type="button" value="&gt;&gt; " onclick="assforward(' + bc + ',' + "'b','" + this.viewername + "'" + ',0)">';
 		t += '</td>';
 	};
-	t = t + '</tr></table></center>';
+	t += '</table>'
+	
+	// linkbox with copy button
+	t += '<table><tr><td>';
+	t +=  `<div class="container">
+        <input type="text" id="URLBox" style="width:51em" readonly value="">
+        <input type="button" value="Copy" onclick="copyURLWithMove()">
+        <span class="copied" id="copied" style="opacity:0">Copied!</span>
+    </div>`
+	t += '</table></center>';
 	return t;
+
 }
 
 function drawinfo(color) {
@@ -4991,7 +5038,7 @@ function drawviewer(color) {
 	document.writeln(tmp);
 	this.setauleft();
 	this.refreshinfo();
-	this.refreshhighlight()
+	this.refreshhighlight();
 	this.a.drawpos();
 	if (this.numboard != 1) {
 		this.b.drawpos();
@@ -5531,7 +5578,8 @@ function game(the_viewer_name, bpgntext, bfen_pos, capture_mode, number_of_board
 	this.reloadgame = reloadgame;
 	this.refreshclock = refreshclock;
 	this.refreshinfo = refreshinfo;
-	this.refreshhighlight = refreshhighlight
+	this.refreshhighlight = refreshhighlight;
+	this.refreshURLBox = refreshURLBox;
 
 	if (bpgntext.charAt(0) != '@') {
 		tmp = this.getbpgnheaders(bpgntext);
