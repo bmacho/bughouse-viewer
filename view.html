@@ -31,6 +31,8 @@ var searchParams = new URLSearchParams(window.location.search)
 var flip = ( searchParams.get('flip') == "true" || searchParams.get('flip') == "1" ) ? 'flip' : 'noflip'
 
 var hide_elo = ( searchParams.get('anon') == "true" || searchParams.get('anon') == "1") ? true : false
+
+var move_param = searchParams.get('move') 
 </script>
 
 <script type="text/javascript">
@@ -187,6 +189,10 @@ function setUpGameFromJSONReplies ( json_replyA, json_replyB ) {
 
 	v1.reloadgame(bpgn1, "", "")
 	assforward(999,'c','v1',0)	
+	
+	if (move_param) {
+		asstomove( move_param,v1 )
+	}
 	
 }
 
