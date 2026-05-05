@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         BHV links for chess.com
-// @version      2026.01.30
+// @version      2026.05.05
 // @description  puts a BHV button into the left menubar, replaces archive game links to BHV links
 // @author       bmacho
 
@@ -102,7 +102,9 @@ function openBHV() {
 
     let flip = board_obj ? board_obj.classList.contains("flipped") ? "&flip=true" : "" : "" ;
 
-    window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip, "_blank") ;
+    let move = (new URL(window.location.href)).searchParams.get("move") ? `&move=${ convertCcomMOV ((new URL(window.location.href)).searchParams.get("move") ) }` : "" ;
+
+    window.open("https://bmacho.github.io/bughouse-viewer/view.html?game_id=" + game_id + flip + move , "_blank") ;
 
 }
 
@@ -177,4 +179,16 @@ Change links`)
 
     setInterval( replaceTbody , 100, pageType );
 
+}
+
+
+function convertCcomMOV(ccomMOV) {
+    const n = Number(ccomMOV);
+    if (!Number.isInteger(n) || n < 1) return null;
+
+    const index = Math.ceil(n / 2);
+    const suffix = n % 2 === 1 ? "A" : "a";
+
+    const BHVMOV = index + suffix;
+    return BHVMOV;
 }
