@@ -68,7 +68,7 @@ Put the BHV button`)
 
         let sidebar_upper = document.getElementById("sidebar-main-menu").children[2]; // wait 
         if ( sidebar_upper ) {
-            add_BHV_button_after( document.getElementById("sidebar-main-menu").querySelector('hr') )  // add BHV button 
+            add_BHV_button_after( document.getElementById("sidebar-main-menu").querySelector('.sidebar-footer-links') )  // add BHV button 
         } else {
             setTimeout(wait, 100);
         }
