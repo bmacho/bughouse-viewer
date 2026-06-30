@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         BHV links for chess.com
-// @version      2026.05.05
+// @version      2026.06.30
 // @description  puts a BHV button into the left menubar, replaces archive game links to BHV links
 // @author       bmacho
 
